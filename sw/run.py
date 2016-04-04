@@ -26,3 +26,7 @@ class Display(object):
 		"""
 		self.window.addText('Ahoj jak se mas', 15)
 		#and rewrite screen
+		self.controll.RewriteDisplay()
+
+new = Display()
+new.main()

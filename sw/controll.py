@@ -13,21 +13,25 @@ class Controll(object):
 		self.display_buffer = [''] * 1536
 		#spi buffer
 		self.spi_buffer = ''
+		#reverse display variable
+		self.reverse = False
 		#last dc (latch) for display
 		self.last_display_dc = False
 		#first ve have to inicialization mcp2210
 		self.init_mcp2210()
 		#next is display ist3020 inicialization
 		self.init_display()
-
 		#gui
 		self.gui = gui
 
 	def init_mcp2210(self):
 		"""inicialization of MCP2210 main chip which allow communication from system to display"""
+		self.communication = MCP2210(0x04D8, 0x00DE)
 		try:
 			self.communication = MCP2210(0x04D8, 0x00DE)
 		except:
+			print('Open failed')
+			exit()
 			pass
 		#gpio local variables
 		self._gpio = self.communication.gpio
@@ -61,7 +65,7 @@ class Controll(object):
 				self._gpio_direction[i] = 0
 		for i in range(0,9):
 			if i != 4 or i != 5 or i != 6 or i != 7 or i != 8:
-			self._gpio[i] = 0
+				self._gpio[i] = 0
 
 	def spi_init(self):
 		"""
@@ -133,7 +137,7 @@ class Controll(object):
 			self.last_dc = True
 		# Convert scalar argument to list so either can be passed as parameter.
 		if isinstance(data, numbers.Number):
-		data = [data & 0xFF]
+			data = [data & 0xFF]
 		#sending data
 		self.WriteByte([chr(x) for x in data], fast)
 
@@ -208,3 +212,15 @@ class Controll(object):
 		"""
 		self.gui.reset()
 		self.controll.RewriteDisplay()
+
+	def Reverse(self, reverse = False):
+		"""
+			reverse display
+		"""
+		if reverse != self.reverse:
+			if reverse:
+				self.WriteCommand(0b0010100111)
+			else:
+				self.WriteCommand(0b0010100110)
+			self.reverse = reverse
+		return True
