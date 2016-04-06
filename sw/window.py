@@ -42,8 +42,8 @@ class GUI(object):
 			Get finish picture which has to show on display - generating bitmap array
 		"""
 		d = [""]*1536
-		self.image = self.image.rotate(self.rotation)
-		dat = self.image.load()
+		self.finall_image = self.image.rotate(self.rotation)
+		dat = self.finall_image.load()
 		page = 0
 		for i in range(0, self.display_height):
 			if i%8 == 0 and i != 0:
@@ -116,10 +116,10 @@ class GUI(object):
 			elif align == "right":
 				x = self.display_width - text_width
 
-		text = textwrap.wrap(text, width=self.display_width)
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
 		self.draw.text((x,y), str(text), font=font, fill = fill)	#can be draw.text....
+		return text_width, text_height
 
 	def addArc(self, start, end, first = [0, 0], second = [0, 0], fill = 1):
 		"""
@@ -182,14 +182,14 @@ class GUI(object):
 		self.draw.rectangle([first[0], first[1], second[0], second[1]], fill = fill, outline = not fill)
 
 	#finally get some information
-	def getMultilineTextSize(self, text, size, font):
+	def getMultilineTextSize(self, text, size, font = 'Arial'):
 		"""
 			get text size
 		"""
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
 		return self.draw.multiline_textsize(str(text), font)
 
-	def getTextSize(self, text, size):
+	def getTextSize(self, text, size, font = 'Arial'):
 		"""
 			get text size
 		"""

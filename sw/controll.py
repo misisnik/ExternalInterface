@@ -224,3 +224,28 @@ class Controll(object):
 				self.WriteCommand(0b0010100110, True)
 			self.reverse = reverse
 		return True
+
+	def Joystick(self):
+		"""
+			Get status of joystick position
+		"""
+		#reset gpio -> load new values
+		self._gpio._value = None
+		gpio = self._gpio
+
+		if not gpio[4]:
+			#prosttedni tlacitko
+			return 'center'
+		if gpio[5]:
+			#doprava
+			return 'right'
+		if gpio[6]:
+			#doleva
+			return 'left'
+		if gpio[7]:
+			#nahoru
+			return 'up'
+		if gpio[8]:
+			#dolu
+			return 'down'
+		return False
