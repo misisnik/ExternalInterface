@@ -4,20 +4,23 @@ from PIL import ImageFont
 import textwrap
 
 system_fonts = {'Arial' : 'arial.ttf'}
-display_width = 192
-display_height = 64
+disp_width = 192
+disp_height = 64
 
 class GUI(object):
 	"""
 		There is class for support graphic part of display
 	"""
-	def __init__(self):
+	def __init__(self, rotation = 0):
 		"""
 			inicialization of gui class
 		"""
 		#visualisation data - default is blank screen -> every px is off
+		self.rotation = rotation #degree of window rotation
 		self.reset()
 		self.changed = False
+		self.display_width = disp_width
+		self.display_height = disp_height
 
 	def reset(self):
 		"""
@@ -25,7 +28,13 @@ class GUI(object):
 		"""
 		self.data = [0x00] * 1536
 		#create new image object
-		self.image = Image.new('1', (display_width, display_height))
+		if self.rotation == 90:
+			self.display_width = disp_height
+			self.display_height = disp_width
+		else:
+			self.display_width = disp_width
+			self.display_height = disp_height
+		self.image = Image.new('1', (self.display_width, self.display_height))
 		self.draw = ImageDraw.Draw(self.image)
 
 	def getBitmap(self):
@@ -33,13 +42,14 @@ class GUI(object):
 			Get finish picture which has to show on display - generating bitmap array
 		"""
 		d = [""]*1536
+		self.image = self.image.rotate(self.rotation)
 		dat = self.image.load()
 		page = 0
-		for i in range(0, 64):
+		for i in range(0, self.display_height):
 			if i%8 == 0 and i != 0:
 				page += 1
-			for c in range(0, 192):
-				d[(page * 192) + c] += str(dat[(c,i)])
+			for c in range(0, self.display_width):
+				d[(page * self.display_width) + c] += str(dat[(c,i)])
 		self.data = [int(i,2) for i in d]
 
 	def addMultilineText(self, text, size = 10, x = 0, y = 0, align = "left", f = 'Arial', spacing = 1, fill = 1):
@@ -54,13 +64,13 @@ class GUI(object):
 		text_width, text_height = self.getMultilineTextSize(text, size, f)
 
 		#multiline text - parse to more line
-		if text_width > display_width:
+		if text_width > self.display_width:
 			longest = 0
 			lines = 0
 			new_text = [""]
 			for i in text:
 				wn, hn = self.getMultilineTextSize(new_text[-1], size, f)
-				if wn > display_width:
+				if wn > self.display_width:
 					#check if we're not in the midle of world
 					last = new_text[-1]
 					for count, l in enumerate(last[::-1]):
@@ -80,12 +90,12 @@ class GUI(object):
 
 			text = "\n".join(new_text)
 			text_width, text_height = self.getMultilineTextSize(text, size, f)
-		#align setting if is just 1line text -> smaller than display_width
-		if text_width < display_width and x == 0:
+		#align setting if is just 1line text -> smaller than self.display_width
+		if text_width < self.display_width and x == 0:
 			if align == "center":
-				x = (display_width - text_width)/2
+				x = (self.display_width - text_width)/2
 			elif align == "right":
-				x = display_width - text_width
+				x = self.display_width - text_width
 
 		#define font
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
@@ -99,14 +109,14 @@ class GUI(object):
 		#get width of text
 		text_width, text_height = self.getTextSize(text, size, f)
 
-		#align setting if is just 1line text -> smaller than display_width
-		if text_width < display_width and x == 0:
+		#align setting if is just 1line text -> smaller than self.display_width
+		if text_width < self.display_width and x == 0:
 			if align == "center":
-				x = (display_width - text_width)/2
+				x = (self.display_width - text_width)/2
 			elif align == "right":
-				x = display_width - text_width
+				x = self.display_width - text_width
 
-		text = textwrap.wrap(text, width=display_width)
+		text = textwrap.wrap(text, width=self.display_width)
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
 		self.draw.text((x,y), str(text), font=font, fill = fill)	#can be draw.text....

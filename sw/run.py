@@ -10,7 +10,8 @@ class Display(object):
 		"""
 			initialization for hw controll and gui part
 		"""
-		self.window = GUI()
+		self.window = GUI(180)	#window degree
+
 		self.controll = Controll(self.window)
 		#write on display first screen 
 		self.controll.RewriteDisplay()
