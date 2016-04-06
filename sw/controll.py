@@ -1,6 +1,7 @@
 from mcp2210.commands import ChipSettings, SPISettings, USBSettings
 from mcp2210.device import MCP2210, CommandException
-
+import numbers
+import time
 ############################################
 #main class
 ############################################
@@ -26,7 +27,7 @@ class Controll(object):
 
 	def init_mcp2210(self):
 		"""inicialization of MCP2210 main chip which allow communication from system to display"""
-		self.communication = MCP2210(0x04D8, 0x00DE)
+		#self.communication = MCP2210(0x04D8, 0x00DE)
 		try:
 			self.communication = MCP2210(0x04D8, 0x00DE)
 		except:
@@ -132,16 +133,16 @@ class Controll(object):
 			if variable fast is True then the data going to send without buffering
 		"""
 		# Set DC low for command, high for data.
-		if self.last_dc != True:
+		if self.last_display_dc != True:
 			self._gpio[1] = True
-			self.last_dc = True
+			self.last_display_dc = True
 		# Convert scalar argument to list so either can be passed as parameter.
 		if isinstance(data, numbers.Number):
 			data = [data & 0xFF]
 		#sending data
 		self.WriteByte([chr(x) for x in data], fast)
 
-	def WriteByte(self, data, fast):
+	def WriteByte(self, data, fast = False):
 		"""
 			If variable fast is True then send now (without buffering) else buffering data until called funtion WriteFromBuffer
 		"""
@@ -150,7 +151,7 @@ class Controll(object):
 		else:
 			self.spi_buffer += "".join(data)
 
-	def WriteFromBuffer(self, data):
+	def WriteFromBuffer(self):
 		"""
 			Write data from buffer
 		"""
@@ -182,7 +183,7 @@ class Controll(object):
 			self.gui.getBitmap()	#get new bitmap of gui
 			self.gui.changed = False
 
-		picture = self.gui.data
+		picture = self.gui.data[::-1]
 		#dooo
 		for i in range(0, 0x08):
 			#compare page with buffer

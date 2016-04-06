@@ -24,7 +24,17 @@ class Display(object):
 		"""
 			just main part of this class - usually add text and so on.... for testing
 		"""
-		self.window.addText('Ahoj jak se mas', 15)
+		self.window.addMultilineText('test jak svina ahoj jak se mas ja se mam dobre a tz se nasndkjas ndkasb dkasbdk absdk asbd abskjd baskj', 10)
+		self.window.addEllipse([0, 20], [50, 30], False)
+
+		self.window.addLine([0,10],[100,10],2)
+
+		#self.window.addArc(0,90,[0,10],[150,40])
+		self.window.addChord(0,90,[0,10],[150,40])
+
+		#self.window.addPolygon([(5,30),(100,30),(50,50)], False)
+		#self.window.addRectangle([0,50], [40,60], False)
+
 		#and rewrite screen
 		self.controll.RewriteDisplay()
 
