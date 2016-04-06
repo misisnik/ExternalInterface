@@ -1,7 +1,6 @@
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
-import textwrap
 
 system_fonts = {'Arial' : 'arial.ttf'}
 disp_width = 192
@@ -60,6 +59,8 @@ class GUI(object):
 				x	 - x position
 				y	 - y position
 		"""
+		if align not in ['left', 'center', 'right']:
+			align = 'left'
 		#get width of text
 		text_width, text_height = self.getMultilineTextSize(text, size, f)
 

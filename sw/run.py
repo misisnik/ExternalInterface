@@ -12,8 +12,9 @@ class Display(object):
 		"""
 		self.window = GUI(180)	#window degree
 		self.controll = Controll(self.window)
+		self.font = ['Arial', 10]
 		#write on display first screen 
-		self.controll.RewriteDisplay()
+		self.rewrite()
 
 	def rotate(self, degree):
 		"""
@@ -41,21 +42,107 @@ class Display(object):
 		"""
 		return self.control.Reset()
 
+	def text(self, text, position = [0, 0], align = 'left', spacing = 1, fill = 1):
+		"""
+			add text to screen buffer
+				text - string of text
+				position - [x, y]
+				align - left, center, right
+				spacing - how many pixels has between lines
+				fill - 1 px is ON 0 px is OFF
+			font u can set before this function by variable
+			Display.font = ['Arial', 10] -> means font name and font size
+		"""
+		return self.window.addMultilineText(text, self.font[1], position[0], position[1], align, self.font[0], spacing, fill)
+
+	def lineText(self, text, position = [0, 0], align = 'left', fill = 1):
+		"""
+			add just one line text
+				text - string of text
+				position - [x, y] where we can start write
+				align - left, center, right
+				fill - 1 is that px is ON, 0 is that px is OFF
+			this function return width and height in pixels of text
+				return (width, height)
+			also as usually font u can change beore this function by variable
+			Display.font = ['Arial', 10] -> means font name and font size
+		"""
+		return self.window.addText(text, self.font[1], position[0], position[1], align, self.font[0], fill)
+
+	def rectangle(self, position, fill = True):
+		"""
+			add rectangle to screen buffer
+				position - [[x0, y0], [x1, y1]]
+				fill - True -> is filled px, False -> is doesn't filled just borderline has
+		"""
+		return self.window.addRectangle(position[0], position[1], fill)
+
+	def elipse(self, position, fill = True):
+		"""
+			add elipse to screen buffer
+				position - [[x0, y0], [x1, y1]]
+				fill - True -> is filled px, False -> is doesn't filled just borderline has
+		"""
+		return self.window.addEllipse(position[0], position[1], fill)
+
+	def line(self, position, width = 1, fill = 1):
+		"""
+			add line to screen buffer
+				position - [[x0, y0], [x1, y1]]
+				width - width of line (basicly height :D)
+				fill - 1 px is ON, 0 px is OFF
+		"""
+		return self.window.addLine(position[0], position[1], width, fill)
+
+	def point(self, position, fill = 1):
+		"""
+			add point to screen buffer
+				position - array of (x,y) like [(x,y), (x,y), (x,y)] each point is just 1px width
+				fill - 1 px is ON, 0 px is OFF
+		"""
+		return self.window.addPoint(position, fill)
+
+	def textSize(self, text):
+		"""
+			this function returned width and height of text size in px
+			example call: width, height = Display.textSize() ----- function return "(width, height)"
+			font u can edit before this function by variable font -> Display.font = ["font name", font size in px]
+		"""
+		return self.window.getMultilineTextSize(text, self.font[1], self.font[0])
+
+	def textLineSize(self, text):
+		"""
+			this function returned width and height of just one line of text in px
+			return (width, height)
+		"""
+		return self.window.getTextSize(text, self.font[1], self.font[0])
+
+	def joystick(self):
+		"""
+			this function maintenance of joystick
+			return is: up, down, left, right, or center
+		"""
+		return self.controll.Joystick()
+
 	def menu(self, title, data):
 		"""
 			Menu function - create menu part
 			inputs are:
-				- menu title
+				- string of menu item
 				- array with menu items like ['item 1', 'item 2', 'item 3']
-			return is key of menu data
+			function jus return key of choosen menu items
 		"""
+		#set font for menu
+		self.font = ['Arial', 10]
+
 		#variables
 		menu_selected = 0		#selected imtem in menu
 		while 1:
 			counter = 0
 			menu_count = 0			#actual
-			title_width, title_height = self.window.addText(title, 11, 0, 0, 'center')
-			self.window.addLine([0,title_height + 2], [self.window.display_width, title_height + 2], 2)
+			#add menu title and underline 2x
+			title_width, title_height = self.lineText(title, [0, 0], 'center')
+			self.line([[0,title_height + 2], [self.window.display_width, title_height + 2]], 2)
 			#helper
 			if menu_selected > len(data) - 1 :
 				menu_selected = len(data) -1
@@ -80,18 +167,20 @@ class Display(object):
 				#and finally create menu
 				fill = True
 				if menu_selected == counter:
-					w,h = self.window.getTextSize(item, 10)
+					w,h = self.textLineSize(item)	#get size of item
 					fill = False
-					self.window.addRectangle([0, 20+(menu_count*12)], [self.window.display_width, 20+(menu_count*12)+(h+1)])
+					#add background rectangle
+					self.rectangle([[0, 20+(menu_count*12)], [self.window.display_width, 20+(menu_count*12)+(h+1)]])
 
-				self.window.addMultilineText(item, 10, 0, 20+(menu_count*12), 'center', 'Arial', 1, fill)
+				#add text which could be multiline
+				self.text(item, [0, 20+(menu_count*12)], 'center', 1, fill)
 				counter += 1
 				menu_count += 1
-			self.controll.RewriteDisplay()
+			self.rewrite()
 			#get joystick seting
-			joystick_old = self.controll.Joystick()
+			joystick_old = self.joystick()
 			while 1:
-				new_joystick = self.controll.Joystick()
+				new_joystick = self.joystick()
 				if joystick_old != new_joystick or new_joystick:
 					break
 				time.sleep(0.1)
@@ -114,23 +203,10 @@ class Display(object):
 		"""
 			just main part of this class - usually add text and so on.... for testing
 		"""
-		while 1:
-			self.window.addMultilineText('test jak svina \nahoj jak se mas jak jak se mas ja se mas mdlsam ldmal dmskla ah',9, 0, 0, 'center')
-			self.window.addEllipse([0, 20], [50, 30], False)
-
-			self.window.addLine([0,10],[100,10],2)
-
-			#self.window.addArc(0,90,[0,10],[150,40])
-			self.window.addChord(0,90,[0,10],[150,40])
-			while 1:
-				time.sleep(1)
-				self.controll.Reverse(not self.controll.reverse)
-				self.controll.RewriteDisplay()
-				#self.window.addPolygon([(5,30),(100,30),(50,50)], False)
-				#self.window.addRectangle([0,50], [40,60], False)
+		pass
 
 new = Display()
 menu_title = "Menu title"
-menu_data = ['Polozka cislo 1', 'Polozka cislo 2', 'Polozka cislo 3', 'Polozka cislo 4']
+menu_data = ['Kratka polozka v menu 1', 'Nejake cislo 2', 'Hodne moc dlouhatanska polozka 3', 'Polozka cislo 4']
 print(new.menu(menu_title, menu_data))
 #new.test()
