@@ -42,7 +42,7 @@ class GUI(object):
 				d[(page * 192) + c] += str(dat[(c,i)])
 		self.data = [int(i,2) for i in d]
 
-	def addMultilineText(self, text, size = 10, x = 0, y = 0, align = "left", f = 'Arial', fill = 1, spacing = 1):
+	def addMultilineText(self, text, size = 10, x = 0, y = 0, align = "left", f = 'Arial', spacing = 1, fill = 1):
 		"""
 			Add multiline text to picture 
 				text - data of text
@@ -60,6 +60,29 @@ class GUI(object):
 			elif align == "right":
 				x = display_width - text_width
 
+		#multiline text - parse to more line
+		if text_width > display_width:
+			new_text = [""]
+			for i in text:
+				wn, hn = self.getMultilineTextSize(new_text[-1], size, f)
+				if wn > display_width:
+					#check if we're not in the midle of world
+					last = new_text[-1]
+					for count, l in enumerate(last[::-1]):
+						if l == " ":
+							break;
+					if count > 0 and count < 10:
+						del new_text[-1]
+						new_text.append(last[0:len(last) - count])
+						new_text.append(last[len(last) - count:])
+					else:
+						new_text.append("")
+
+				new_text[-1] += i
+				if i == "\n":
+					new_text.append("")
+
+			text = "\n".join(new_text)
 		#define font
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
