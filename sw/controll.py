@@ -220,8 +220,8 @@ class Controll(object):
 		"""
 		if reverse != self.reverse:
 			if reverse:
-				self.WriteCommand(0b0010100111)
+				self.WriteCommand(0b0010100111, True)
 			else:
-				self.WriteCommand(0b0010100110)
+				self.WriteCommand(0b0010100110, True)
 			self.reverse = reverse
 		return True
