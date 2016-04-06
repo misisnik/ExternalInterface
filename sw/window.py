@@ -4,6 +4,8 @@ from PIL import ImageFont
 import textwrap
 
 system_fonts = {'Arial' : 'arial.ttf'}
+display_width = 192
+display_height = 64
 
 class GUI(object):
 	"""
@@ -14,8 +16,6 @@ class GUI(object):
 			inicialization of gui class
 		"""
 		#visualisation data - default is blank screen -> every px is off
-		self.display_width = 192
-		self.display_height = 64
 		self.reset()
 		self.changed = False
 
@@ -25,7 +25,7 @@ class GUI(object):
 		"""
 		self.data = [0x00] * 1536
 		#create new image object
-		self.image = Image.new('1', (self.display_width, self.display_height))
+		self.image = Image.new('1', (display_width, display_height))
 		self.draw = ImageDraw.Draw(self.image)
 
 	def getBitmap(self):
@@ -42,7 +42,7 @@ class GUI(object):
 				d[(page * 192) + c] += str(dat[(c,i)])
 		self.data = [int(i,2) for i in d]
 
-	def addMultilineText(self, text, size = 10, x = 0, y = 0, f = 'Arial', fill = 1, spacing = 1, align = "left"):
+	def addMultilineText(self, text, size = 10, x = 0, y = 0, align = "left", f = 'Arial', fill = 1, spacing = 1):
 		"""
 			Add multiline text to picture 
 				text - data of text
@@ -50,16 +50,36 @@ class GUI(object):
 				x	 - x position
 				y	 - y position
 		"""
+		#get width of text
+		text_width, text_height = self.getMultilineTextSize(text, size, f)
+
+		#align setting if is just 1line text -> smaller than display_width
+		if text_width < display_width and x == 0:
+			if align == "center":
+				x = (display_width - text_width)/2
+			elif align == "right":
+				x = display_width - text_width
+
 		#define font
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
 		self.draw.multiline_text((x,y), str(text), font=font, fill = fill, align = align, spacing = spacing)
 
-	def addText(self, text, size, x = 0, y = 0, f = 'Arial', fill = 1):
+	def addText(self, text, size, x = 0, y = 0, align = "left", f = 'Arial', fill = 1):
 		"""
 			Add text
 		"""
-		text = textwrap.wrap(text, width=self.display_width)
+		#get width of text
+		text_width, text_height = self.getTextSize(text, size, f)
+
+		#align setting if is just 1line text -> smaller than display_width
+		if text_width < display_width and x == 0:
+			if align == "center":
+				x = (display_width - text_width)/2
+			elif align == "right":
+				x = display_width - text_width
+
+		text = textwrap.wrap(text, width=display_width)
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
 		self.draw.text((x,y), str(text), font=font, fill = fill)	#can be draw.text....
@@ -125,16 +145,16 @@ class GUI(object):
 		self.draw.rectangle([first[0], first[1], second[0], second[1]], fill = fill, outline = not fill)
 
 	#finally get some information
-	def getMultilineTextSize(self, text, size):
+	def getMultilineTextSize(self, text, size, font):
 		"""
 			get text size
 		"""
-		font = ImageFont.truetype('fonts/arial.ttf', size)
+		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
 		return self.draw.multiline_textsize(str(text), font)
 
 	def getTextSize(self, text, size):
 		"""
 			get text size
 		"""
-		font = ImageFont.truetype('fonts/arial.ttf', size)
+		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
 		return self.draw.textsize(str(text), font)
