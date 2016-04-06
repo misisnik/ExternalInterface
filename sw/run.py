@@ -24,7 +24,7 @@ class Display(object):
 		"""
 			just main part of this class - usually add text and so on.... for testing
 		"""
-		self.window.addMultilineText('test jak svina', 10, 0, 0, 'left')
+		self.window.addMultilineText('test jak svina \nahoj jak se mas jak jak se mas ja se mas mdlsam ldmal dmskla ah', 10, 0, 0, 'center')
 		self.window.addEllipse([0, 20], [50, 30], False)
 
 		self.window.addLine([0,10],[100,10],2)

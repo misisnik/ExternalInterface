@@ -53,15 +53,10 @@ class GUI(object):
 		#get width of text
 		text_width, text_height = self.getMultilineTextSize(text, size, f)
 
-		#align setting if is just 1line text -> smaller than display_width
-		if text_width < display_width and x == 0:
-			if align == "center":
-				x = (display_width - text_width)/2
-			elif align == "right":
-				x = display_width - text_width
-
 		#multiline text - parse to more line
 		if text_width > display_width:
+			longest = 0
+			lines = 0
 			new_text = [""]
 			for i in text:
 				wn, hn = self.getMultilineTextSize(new_text[-1], size, f)
@@ -78,11 +73,20 @@ class GUI(object):
 					else:
 						new_text.append("")
 
-				new_text[-1] += i
 				if i == "\n":
 					new_text.append("")
+				else:
+					new_text[-1] += i
 
 			text = "\n".join(new_text)
+			text_width, text_height = self.getMultilineTextSize(text, size, f)
+		#align setting if is just 1line text -> smaller than display_width
+		if text_width < display_width and x == 0:
+			if align == "center":
+				x = (display_width - text_width)/2
+			elif align == "right":
+				x = display_width - text_width
+
 		#define font
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
