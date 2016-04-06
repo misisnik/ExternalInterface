@@ -11,42 +11,42 @@ class Display(object):
 			initialization for hw controll and gui part
 		"""
 		self.window = GUI(180)	#window degree
+		self.controll = Controll(self.window)
+		#write on display first screen 
+		self.controll.RewriteDisplay()
 
-		try:
-			self.controll = Controll(self.window)
-			#write on display first screen 
-			self.controll.RewriteDisplay()
-		except:
-			print('aaaa failed')
+	def rotate(self, degree):
+		"""
+			rotate window
+			input is just degree of rotating
+		"""
+		self.window.rotation = degree
+		return True
 
-	def Reset(self):
+	def rewrite(self):
+		"""
+			rewrite display from gui buffer
+		"""
+		return self.controll.RewriteDisplay()
+
+	def resetBuffer(self):
+		"""
+			reset (erase) window (GUI) buffer
+		"""
+		return self.window.reset()
+
+	def reset(self):
 		"""
 			Reset display - it means that reset array in window (gui) and those write via SPI
 		"""
-		self.control.Reset()
-
-	def main(self):
-		while 1:
-			"""
-				just main part of this class - usually add text and so on.... for testing
-			"""
-			self.window.addMultilineText('test jak svina \nahoj jak se mas jak jak se mas ja se mas mdlsam ldmal dmskla ah',9, 0, 0, 'center')
-			self.window.addEllipse([0, 20], [50, 30], False)
-
-			self.window.addLine([0,10],[100,10],2)
-
-			#self.window.addArc(0,90,[0,10],[150,40])
-			self.window.addChord(0,90,[0,10],[150,40])
-			while 1:
-				time.sleep(1)
-				self.controll.Reverse(not self.controll.reverse)
-				self.controll.RewriteDisplay()
-				#self.window.addPolygon([(5,30),(100,30),(50,50)], False)
-				#self.window.addRectangle([0,50], [40,60], False)
+		return self.control.Reset()
 
 	def menu(self, title, data):
 		"""
 			Menu function - create menu part
+			inputs are:
+				- menu title
+				- array with menu items like ['item 1', 'item 2', 'item 3']
 			return is key of menu data
 		"""
 		#variables
@@ -54,9 +54,8 @@ class Display(object):
 		while 1:
 			counter = 0
 			menu_count = 0			#actual
-			title_width, title_height = self.window.addText(title, 10, 0, 0, 'center')
+			title_width, title_height = self.window.addText(title, 11, 0, 0, 'center')
 			self.window.addLine([0,title_height + 2], [self.window.display_width, title_height + 2], 2)
-
 			#helper
 			if menu_selected > len(data) - 1 :
 				menu_selected = len(data) -1
@@ -102,17 +101,36 @@ class Display(object):
 			elif new_joystick == 'down':
 				menu_selected +=1
 			elif new_joystick == 'center':
-				return menu_selected
+				return menu_selected	#return choosed item...
 			#finally check selected menu
 			if menu_selected >= len(data):
 				menu_selected = len(data) - 1
 			elif menu_selected < 0:
 				menu_selected = 0
 			#and reset window -> erase window in GUI part
-			self.window.reset()
+			self.resetBuffer()
+
+	def test(self):
+		"""
+			just main part of this class - usually add text and so on.... for testing
+		"""
+		while 1:
+			self.window.addMultilineText('test jak svina \nahoj jak se mas jak jak se mas ja se mas mdlsam ldmal dmskla ah',9, 0, 0, 'center')
+			self.window.addEllipse([0, 20], [50, 30], False)
+
+			self.window.addLine([0,10],[100,10],2)
+
+			#self.window.addArc(0,90,[0,10],[150,40])
+			self.window.addChord(0,90,[0,10],[150,40])
+			while 1:
+				time.sleep(1)
+				self.controll.Reverse(not self.controll.reverse)
+				self.controll.RewriteDisplay()
+				#self.window.addPolygon([(5,30),(100,30),(50,50)], False)
+				#self.window.addRectangle([0,50], [40,60], False)
 
 new = Display()
 menu_title = "Menu title"
 menu_data = ['Polozka cislo 1', 'Polozka cislo 2', 'Polozka cislo 3', 'Polozka cislo 4']
 print(new.menu(menu_title, menu_data))
-#new.main()
+#new.test()
