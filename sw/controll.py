@@ -30,8 +30,8 @@ class Controll(object):
 		#self.communication = MCP2210(0x04D8, 0x00DE)
 		try:
 			self.communication = MCP2210(0x04D8, 0x00DE)
-		except:
-			raise('Open failed')
+		except Exception as e:
+			raise Exception('Failed to open USB chanel')
 
 		#gpio local variables
 		self._gpio = self.communication.gpio
@@ -39,6 +39,8 @@ class Controll(object):
 		#other inicialization
 		self.gpio_init()
 		self.spi_init()
+
+
 
 	def gpio_init(self):
 		"""
@@ -146,7 +148,14 @@ class Controll(object):
 			If variable fast is True then send now (without buffering) else buffering data until called funtion WriteFromBuffer
 		"""
 		if fast:
-			self.communication.transfer("".join(data))
+			try:
+				self.communication.transfer("".join(data))
+			except ValueError as e:
+				self.exceptionConnect()
+				time.sleep(0.5)
+				#and try again
+				self.WriteByte(data, fast)
+
 		else:
 			self.spi_buffer += "".join(data)
 
@@ -154,7 +163,14 @@ class Controll(object):
 		"""
 			Write data from buffer
 		"""
-		self.communication.transfer(self.spi_buffer)
+		try:
+			self.communication.transfer(self.spi_buffer)
+		except ValueError as e:
+			self.exceptionConnect()
+			time.sleep(0.5)
+			#and try again
+			self.WriteFromBuffer()
+
 		self.spi_buffer = ''
 
 	def SetPageAddress(self, data):
@@ -230,22 +246,40 @@ class Controll(object):
 			Get status of joystick position
 		"""
 		#reset gpio -> load new values
-		self._gpio._value = None
-		gpio = self._gpio
+		try:
+			self._gpio._value = None
+			gpio = self._gpio
 
-		if not gpio[4]:
-			#prosttedni tlacitko
-			return 'center'
-		if gpio[5]:
-			#doprava
-			return 'right'
-		if gpio[6]:
-			#doleva
-			return 'left'
-		if gpio[7]:
-			#nahoru
-			return 'up'
-		if gpio[8]:
-			#dolu
-			return 'down'
-		return False
+			if not gpio[4]:
+				#prosttedni tlacitko
+				return 'center'
+			if gpio[5]:
+				#doprava
+				return 'right'
+			if gpio[6]:
+				#doleva
+				return 'left'
+			if gpio[7]:
+				#nahoru
+				return 'up'
+			if gpio[8]:
+				#dolu
+				return 'down'
+			return False
+		except ValueError as e:
+			#failed to open hid try to connect
+			self.exceptionConnect()
+			#and try to again call this function
+			return self.Joystick()
+
+	def exceptionConnect(self):
+		while 1:
+			try:
+				self.__init__(self.gui)
+				#and rewrite display
+				self.RewriteDisplay()
+				break
+			except Exception as e:
+				print(e)
+				time.sleep(1)
+		return True

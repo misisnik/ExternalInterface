@@ -12,9 +12,12 @@ class Display(object):
 		"""
 		self.window = GUI(180)	#window degree
 
-		self.controll = Controll(self.window)
-		#write on display first screen 
-		self.controll.RewriteDisplay()
+		try:
+			self.controll = Controll(self.window)
+			#write on display first screen 
+			self.controll.RewriteDisplay()
+		except:
+			print('aaaa failed')
 
 	def Reset(self):
 		"""
@@ -34,22 +37,12 @@ class Display(object):
 
 			#self.window.addArc(0,90,[0,10],[150,40])
 			self.window.addChord(0,90,[0,10],[150,40])
-			try:
-				while 1:
-					time.sleep(1)
-					self.controll.Reverse(not self.controll.reverse)
-					self.controll.RewriteDisplay()
+			while 1:
+				time.sleep(1)
+				self.controll.Reverse(not self.controll.reverse)
+				self.controll.RewriteDisplay()
 				#self.window.addPolygon([(5,30),(100,30),(50,50)], False)
 				#self.window.addRectangle([0,50], [40,60], False)
-			except Exception as e:
-				while 1:
-					try:
-						self.controll = Controll(self.window)
-						#write on display first screen 
-						self.controll.RewriteDisplay()
-						break
-					except:
-						continue
 
 	def menu(self, title, data):
 		"""
@@ -118,8 +111,8 @@ class Display(object):
 			#and reset window -> erase window in GUI part
 			self.window.reset()
 
-
 new = Display()
 menu_title = "Menu title"
 menu_data = ['Polozka cislo 1', 'Polozka cislo 2', 'Polozka cislo 3', 'Polozka cislo 4']
 print(new.menu(menu_title, menu_data))
+#new.main()
