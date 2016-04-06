@@ -31,9 +31,8 @@ class Controll(object):
 		try:
 			self.communication = MCP2210(0x04D8, 0x00DE)
 		except:
-			print('Open failed')
-			exit()
-			pass
+			raise('Open failed')
+
 		#gpio local variables
 		self._gpio = self.communication.gpio
 		self._gpio_direction = self.communication.gpio_direction
