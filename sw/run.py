@@ -245,6 +245,71 @@ class Display(object):
 				time.sleep(0.1)
 			printed_text = " ".join(text_array[c: c + per_page])
 
+	def selectNumber(self, title, start, step):
+		"""
+			selecting number from x step is step
+				from
+				step
+			returned value of choosen number
+		"""
+		choosen = start
+		while 1:
+			self.resetBuffer()
+			self.font = ['Arial', 10]
+			title_width, title_height = self.lineText(title, [0, 0], 'center')
+			self.line([[0,title_height + 2], [self.window.display_width, title_height + 2]], 2)
+			self.rectangle([[71, 20], [121, 55]])
+			rectangle_width = 50
+
+			win = (192 - rectangle_width) / 2
+			#and two lines
+			self.line([[0,29],[192 ,29]], 2)
+			self.line([[0,45],[192 ,45]], 2)
+			self.line([[win / 2,29],[win / 2 ,45]], 1)
+			self.line([[win + rectangle_width + (win /2 ),29],[win + rectangle_width + (win / 2) ,45]], 1)
+
+			#show choosen 
+			self.font = ['Arial', 17]
+			choosen_width, choosen_height = self.lineText(str(choosen), [0,29], "center", 0)
+			self.font = ['Arial', 10]
+
+			count = 0
+			for i in range(choosen - (2 * (step)), choosen + (step * 6), step):
+				if choosen == i or i < 0 :
+					continue
+				tw, th = self.textLineSize(str(i))
+				if i < choosen:
+					if (i + step) != choosen:
+						#first
+						pos = ((win / 2) / 2) - (tw / 2)
+					else:
+						#second
+						pos = (win/2) + 2 + ((win / 2) / 2) - (tw / 2)
+				else:
+					count +=1
+					if (i - step) != choosen:
+						#next one - after choosen
+						pos = win + rectangle_width + 2 + ((win / 2) / 2) - (tw / 2)
+					else:
+						#second
+						pos = win + rectangle_width + (win/2) + 2 + ((win / 2) / 2) - (tw / 2)
+				self.lineText(str(i), [pos, 33])
+				if count == 2:
+					break
+			self.rewrite()
+
+			#joystick
+			while 1:
+				joy = self.joystick()
+				if joy == "center":
+					return choosen
+				elif joy == "left" and choosen > start:
+					choosen -= step
+					break
+				elif joy == "right":
+					choosen += step
+					break
+				time.sleep(0.005)
 
 	def test(self):
 		"""
@@ -258,4 +323,5 @@ menu_data = ['Kratka polozka v menu 1', 'Nejake cislo 2', 'Hodne moc dlouhatansk
 #print(new.menu(menu_title, menu_data))
 #new.test()
 text = "From the very beginning of Android, Apple has been complaining that its Android competitors are ripping off its iPhone designs. Whether the culprit is the Samsung Galaxy S, the HTC One A9, or the ZTE Whatever, Apple is all too happy to remind the world that it's the leader and Android device makers are its followers. Well, things have been changing lately, and today's debut of the Huawei P9 adds momentum to a growing tide of distinctive new phones coming out of China — ones that aren't defined by a religious adherence to photocopying the iPhone. The Huawei P9 and the Xiaomi Mi 5 before it are the harbingers of a much more dangerous rival to Apple, a set of Chinese manufacturers capable of crafting their own, attractive, even premium designs.Don't get me wrong, I'm not here to argue that the entire mobile industry has suddenly developed scruples about ripping off Apple's design work. Just a glance or two at Oppo's F1 Plus or Meizu's Pro 5 will tell you that iPhone imitations are still very much alive and thriving. But the substantive change that's taken place in the mobile industry recently is the recognition of the paramount importance of high-quality industrial design. Xiaomi poured two years of development work into the Mi 5, while Huawei  outspent Apple on research and development last year by more than a billion dollars. Those investments are aimed at long-term technical innovations, an important subset of which is the development and refinement of standout designs. The P9 has a similar metal construction to the iPhone, but it feels different and, thanks to its idiosyncratic pair of camera eyes, looks different too.The copying of Apple has evolved. It's less literal now, as companies strive to recreate the essence of Apple's success, whether it be through vertical integration (as with Huawei and its in-house processor design), positive brand associations, or simple aesthetic and tactile appeal. Apple is still the Michael Jordan that every Chinese smartphone manufacturer looks up to, but instead of trying to dunk with their tongues sticking out or shoot fadeaway jumpers, these rising stars are developing their own ways of scoring points with consumers. Instead of imitating, they are emulating.There's no other way to interpret this development than as decidedly good news. Huawei has gone from routinely copying Sony's Xperia Z designs — culminating in the utterly anonymous Huawei P8 last year — to defining its own look and feel, as well as staking a claim for technological leadership with its unique camera setup. The dual-camera system on the Huawei P9 is not attempting to serve up fresh gimmicks, and is instead targeted at improving contrast, gathering more light, and generally making every photo look as good as it can possibly be. I'm not yet sure how well Huawei has executed this plan, but I can already say that the concept makes sense from a photographer's perspective and shows the right ambition to get ahead rather than chase from behind. Plus, Huawei is doing the whole two-camera trick without resorting to an unattractive camera wart. There's no Apple blueprint for making that happen, so what we're witnessing now is Huawei flexing its own engineering muscle."
-new.textArea(text)
+#new.textArea(text)
+print(new.selectNumber("Choose number", 1,2))
