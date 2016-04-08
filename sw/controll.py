@@ -120,7 +120,7 @@ class Controll(object):
 		"""
 		#Set DC low for command
 		if self.last_display_dc != False:
-			self._gpio[1] = False
+			self._gpio[2] = False
 			self.last_display_dc = False
 		#Convert scalar argument to list so either can be passed as parameter.
 		if isinstance(data, numbers.Number):
@@ -135,7 +135,7 @@ class Controll(object):
 		"""
 		# Set DC low for command, high for data.
 		if self.last_display_dc != True:
-			self._gpio[1] = True
+			self._gpio[2] = True
 			self.last_display_dc = True
 		# Convert scalar argument to list so either can be passed as parameter.
 		if isinstance(data, numbers.Number):
@@ -250,20 +250,22 @@ class Controll(object):
 			self._gpio._value = None
 			gpio = self._gpio
 
-			if not gpio[4]:
-				#prosttedni tlacitko
+			gpio_bin = "{0}{1}{2}".format(gpio[6], gpio[5], gpio[4])
+
+			if gpio_bin == "101":
+				#central button
 				return 'center'
-			if gpio[5]:
-				#doprava
+			if gpio_bin == "001":
+				#right
 				return 'right'
-			if gpio[6]:
-				#doleva
+			if gpio_bin == "010":
+				#left
 				return 'left'
-			if gpio[7]:
-				#nahoru
+			if gpio_bin == "011":
+				#up
 				return 'up'
-			if gpio[8]:
-				#dolu
+			if gpio_bin == "100":
+				#down
 				return 'down'
 			return False
 		except ValueError as e:
