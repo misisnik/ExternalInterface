@@ -61,13 +61,11 @@ class Controll(object):
 		self.communication.chip_settings = gpio_settings
 		#and also direction
 		for i in range(0,9):
-			if i == 4 or i == 5 or i == 6 or i == 7 or i == 8:
-				self._gpio_direction[i] = 1
+			if i == 4 or i == 5 or i == 6 or i == 7:
+				self._gpio_direction[i] = 0x01
 			else:
-				self._gpio_direction[i] = 0
-		for i in range(0,9):
-			if i != 4 or i != 5 or i != 6 or i != 7 or i != 8:
-				self._gpio[i] = 0
+				self._gpio_direction[i] = 0x00
+				self._gpio[i] = False
 
 	def spi_init(self):
 		"""
@@ -273,6 +271,18 @@ class Controll(object):
 			self.exceptionConnect()
 			#and try to again call this function
 			return self.Joystick()
+
+	def setErrorLed(self, status):
+		"""
+			set error set 	
+				True - led is ON
+				False - led is OFF
+		"""
+		self._gpio_direction[8] = 0x00
+		if status:
+			self._gpio[8] = True
+		else:
+			self._gpio[8] = False
 
 	def exceptionConnect(self):
 		while 1:
