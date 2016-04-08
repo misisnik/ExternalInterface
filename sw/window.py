@@ -58,14 +58,18 @@ class GUI(object):
 				size - px size of letter
 				x	 - x position
 				y	 - y position
+
+			return total lines, lines to print, array of text
 		"""
 		if align not in ['left', 'center', 'right']:
 			align = 'left'
 		#get width of text
 		text_width, text_height = self.getMultilineTextSize(text, size, f)
-
+		lines = 1
+		lines_to_print = 1
+		new_text = []
 		#multiline text - parse to more line
-		if text_width > self.display_width:
+		if text_width > self.display_width or text_height > self.display_height:
 			longest = 0
 			lines = 0
 			new_text = [""]
@@ -88,8 +92,12 @@ class GUI(object):
 					new_text.append("")
 				else:
 					new_text[-1] += i
+			lines = len(new_text)
+			#calculate number of writing lines
 
-			text = "\n".join(new_text)
+			wt, ht = self.getTextSize(text, size, f)
+			lines_to_print = int(self.display_height/(ht + spacing))
+			text = "\n".join(new_text[0:lines_to_print])
 			text_width, text_height = self.getMultilineTextSize(text, size, f)
 		#align setting if is just 1line text -> smaller than self.display_width
 		if text_width < self.display_width and x == 0:
@@ -102,6 +110,7 @@ class GUI(object):
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
 		self.draw.multiline_text((x,y), str(text), font=font, fill = fill, align = align, spacing = spacing)
+		return (lines, lines_to_print, new_text)
 
 	def addText(self, text, size, x = 0, y = 0, align = "left", f = 'Arial', fill = 1):
 		"""
