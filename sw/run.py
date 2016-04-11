@@ -132,6 +132,15 @@ class Display(object):
 		"""
 		return self.controll.setErrorLed(status)
 
+	def title(self, title):
+		"""
+			add title to function
+				title - title text
+		"""
+		self.font = ['Arial', 10]
+		title_width, title_height = self.lineText(title, [0, 0], 'center')
+		self.line([[0,title_height + 2], [self.window.display_width, title_height + 2]], 2)
+
 	def menu(self, title, data):
 		"""
 			Menu function - create menu part
@@ -149,8 +158,7 @@ class Display(object):
 			counter = 0
 			menu_count = 0			#actual
 			#add menu title and underline 2x
-			title_width, title_height = self.lineText(title, [0, 0], 'center')
-			self.line([[0,title_height + 2], [self.window.display_width, title_height + 2]], 2)
+			self.title(title)
 			#helper
 			if menu_selected > len(data) - 1 :
 				menu_selected = len(data) -1
@@ -262,9 +270,7 @@ class Display(object):
 		choosen = start
 		while 1:
 			self.resetBuffer()
-			self.font = ['Arial', 10]
-			title_width, title_height = self.lineText(title, [0, 0], 'center')
-			self.line([[0,title_height + 2], [self.window.display_width, title_height + 2]], 2)
+			self.title(title)
 			self.rectangle([[71, 20], [121, 55]])
 			rectangle_width = 50
 
@@ -318,6 +324,87 @@ class Display(object):
 					break
 				time.sleep(0.005)
 
+	def question(self, text):
+		"""
+			add function to rendering question on display
+				text - question text
+			return is True when answer is OK or False when answer is NG
+		"""
+		self.resetBuffer()
+		self.font = ['Arial', 11]
+		question_width, question_height = self.lineText(text, [3, 25])
+
+		self.font = ['Arial', 12]
+		#button OK
+		self.rectangle([[150,0],[192,20]], False)
+		self.rectangle([[153,3],[192,17]], False)
+		self.line([[150,0],[153,3]], 1)
+		self.line([[150,20],[153,17]], 1)
+
+		self.lineText('OK', [164, 4])
+		#button NG
+		self.rectangle([[150,43],[192,63]], False)
+		self.rectangle([[153,46],[192,60]], False)
+		self.line([[150,43],[153,46]], 1)
+		self.line([[150,63],[153,60]], 1)
+		self.lineText('NG', [164, 47])
+		self.rewrite()
+		while 1:
+			#load buttons and w8 for push OK or NG
+			# buttons = self.buttons()
+			# if buttons != None:
+			# 	return buttons
+			time.sleep(0.1)
+
+	def checkbox(self, title, data):
+		"""
+			add checkboxs from data
+			data - array of checkbox example: ['Question 1', 'Question 2', 'Question 3']
+			return array of true or false example [True, False, False]....
+			press center button to send
+		"""
+		position = 0
+		page = 0
+		data_result = [False] * len(data)
+		while 1:
+			self.resetBuffer()
+			self.title(title)
+			self.textSize =  ['Arial', 10]
+
+			for i in range(3):
+				if position + i > len(data):
+					break
+				p = (i * 12)
+				actual = int(position -1/3) + i
+				if position - 1 < len(data) and position > 0 and i == 1:
+					self.rectangle([[-1, 18 + p], [192, 28 + p]], False)
+				elif position == 0 and i == 0:
+					self.rectangle([[-1, 18 + p], [192, 28 + p]], False)
+
+				#checkbox
+				self.rectangle([[1,20 + p], [7,26 + p]], False)
+				self.lineText(data[actual], [9,17 + p])
+				#checked
+				if data_result[actual] == True:
+					self.line([[1,20 + p], [7,26 + p]], 1)
+					self.line([[7,20 + p], [1,26 + p]], 1)
+			self.rewrite()
+			#joystick
+			while 1:
+				# if self.buttons():
+				# 	return data_result
+				joy = self.joystick()
+				if joy == 'up' and position > 0:
+					position -= 1
+				elif joy == 'down' and position + 1 < len(data):
+					position += 1
+				elif joy == 'center':
+					data_result[position] = not data_result[position]
+				else:
+					time.sleep(0.1)
+					continue
+				break
+
 	def test(self):
 		"""
 			just main part of this class - usually add text and so on.... for testing
@@ -325,12 +412,17 @@ class Display(object):
 		pass
 
 new = Display()
-menu_title = "Menu title"
-menu_data = ['Kratka polozka v menu 1', 'Nejake cislo 2', 'Hodne moc dlouhatanska polozka 3', 'Polozka cislo 4']
-print(new.menu(menu_title, menu_data))
-#new.test()
-text = "From the very beginning of Android, Apple has been complaining that its Android competitors are ripping off its iPhone designs. Whether the culprit is the Samsung Galaxy S, the HTC One A9, or the ZTE Whatever, Apple is all too happy to remind the world that it's the leader and Android device makers are its followers. Well, things have been changing lately, and today's debut of the Huawei P9 adds momentum to a growing tide of distinctive new phones coming out of China — ones that aren't defined by a religious adherence to photocopying the iPhone. The Huawei P9 and the Xiaomi Mi 5 before it are the harbingers of a much more dangerous rival to Apple, a set of Chinese manufacturers capable of crafting their own, attractive, even premium designs.Don't get me wrong, I'm not here to argue that the entire mobile industry has suddenly developed scruples about ripping off Apple's design work. Just a glance or two at Oppo's F1 Plus or Meizu's Pro 5 will tell you that iPhone imitations are still very much alive and thriving. But the substantive change that's taken place in the mobile industry recently is the recognition of the paramount importance of high-quality industrial design. Xiaomi poured two years of development work into the Mi 5, while Huawei  outspent Apple on research and development last year by more than a billion dollars. Those investments are aimed at long-term technical innovations, an important subset of which is the development and refinement of standout designs. The P9 has a similar metal construction to the iPhone, but it feels different and, thanks to its idiosyncratic pair of camera eyes, looks different too.The copying of Apple has evolved. It's less literal now, as companies strive to recreate the essence of Apple's success, whether it be through vertical integration (as with Huawei and its in-house processor design), positive brand associations, or simple aesthetic and tactile appeal. Apple is still the Michael Jordan that every Chinese smartphone manufacturer looks up to, but instead of trying to dunk with their tongues sticking out or shoot fadeaway jumpers, these rising stars are developing their own ways of scoring points with consumers. Instead of imitating, they are emulating.There's no other way to interpret this development than as decidedly good news. Huawei has gone from routinely copying Sony's Xperia Z designs — culminating in the utterly anonymous Huawei P8 last year — to defining its own look and feel, as well as staking a claim for technological leadership with its unique camera setup. The dual-camera system on the Huawei P9 is not attempting to serve up fresh gimmicks, and is instead targeted at improving contrast, gathering more light, and generally making every photo look as good as it can possibly be. I'm not yet sure how well Huawei has executed this plan, but I can already say that the concept makes sense from a photographer's perspective and shows the right ambition to get ahead rather than chase from behind. Plus, Huawei is doing the whole two-camera trick without resorting to an unattractive camera wart. There's no Apple blueprint for making that happen, so what we're witnessing now is Huawei flexing its own engineering muscle."
-#new.textArea(text)
+
+new.checkbox('Checkbox test', ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5', 'Question 6'])
+
+#new.question("Are you OK ??")
+
+# menu_title = "Menu title"
+# menu_data = ['Kratka polozka v menu 1', 'Nejake cislo 2', 'Hodne moc dlouhatanska polozka 3', 'Polozka cislo 4']
+# print(new.menu(menu_title, menu_data))
+# #new.test()
+# text = "From the very beginning of Android, Apple has been complaining that its Android competitors are ripping off its iPhone designs. Whether the culprit is the Samsung Galaxy S, the HTC One A9, or the ZTE Whatever, Apple is all too happy to remind the world that it's the leader and Android device makers are its followers. Well, things have been changing lately, and today's debut of the Huawei P9 adds momentum to a growing tide of distinctive new phones coming out of China — ones that aren't defined by a religious adherence to photocopying the iPhone. The Huawei P9 and the Xiaomi Mi 5 before it are the harbingers of a much more dangerous rival to Apple, a set of Chinese manufacturers capable of crafting their own, attractive, even premium designs.Don't get me wrong, I'm not here to argue that the entire mobile industry has suddenly developed scruples about ripping off Apple's design work. Just a glance or two at Oppo's F1 Plus or Meizu's Pro 5 will tell you that iPhone imitations are still very much alive and thriving. But the substantive change that's taken place in the mobile industry recently is the recognition of the paramount importance of high-quality industrial design. Xiaomi poured two years of development work into the Mi 5, while Huawei  outspent Apple on research and development last year by more than a billion dollars. Those investments are aimed at long-term technical innovations, an important subset of which is the development and refinement of standout designs. The P9 has a similar metal construction to the iPhone, but it feels different and, thanks to its idiosyncratic pair of camera eyes, looks different too.The copying of Apple has evolved. It's less literal now, as companies strive to recreate the essence of Apple's success, whether it be through vertical integration (as with Huawei and its in-house processor design), positive brand associations, or simple aesthetic and tactile appeal. Apple is still the Michael Jordan that every Chinese smartphone manufacturer looks up to, but instead of trying to dunk with their tongues sticking out or shoot fadeaway jumpers, these rising stars are developing their own ways of scoring points with consumers. Instead of imitating, they are emulating.There's no other way to interpret this development than as decidedly good news. Huawei has gone from routinely copying Sony's Xperia Z designs — culminating in the utterly anonymous Huawei P8 last year — to defining its own look and feel, as well as staking a claim for technological leadership with its unique camera setup. The dual-camera system on the Huawei P9 is not attempting to serve up fresh gimmicks, and is instead targeted at improving contrast, gathering more light, and generally making every photo look as good as it can possibly be. I'm not yet sure how well Huawei has executed this plan, but I can already say that the concept makes sense from a photographer's perspective and shows the right ambition to get ahead rather than chase from behind. Plus, Huawei is doing the whole two-camera trick without resorting to an unattractive camera wart. There's no Apple blueprint for making that happen, so what we're witnessing now is Huawei flexing its own engineering muscle."
+# new.textArea(text)
 print(new.selectNumber("Choose number", 1,2))
 while 1:
 	new.led(True)
