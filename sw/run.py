@@ -464,13 +464,15 @@ class Display(object):
 		pass
 
 display = Display()
+
 display.selectNumber("select number", 1 , 1)
-#display.menu('Menu', ['prvni', 'druhy', 'treti', 'ctvrty'])
-# display.status = ("Status jak svina")
-# display.message = ("Message jak svina")
-# display.error_win = ("Error jak svina")
-# time.sleep(2)
-# for i in range(5000):
-# 	display.message.clear()
-# 	display.message ="aaaaa {0}".format(i)
-# 	time.sleep(1)
+
+display.status = ("Status jak svina")
+display.message = ("Message jak svina")
+display.error_win = ("Error jak svina")
+time.sleep(2)
+for i in range(5000):
+	display.message.clear()
+	display.message ="aaaaa {0}".format(i)
+	time.sleep(1)
+
