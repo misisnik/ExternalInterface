@@ -1,6 +1,7 @@
 """Top part of whole display software. There are mostly GUI commands"""
 
 from controll import Controll
+from matrix_orbital import MatrixOrbital
 from window import GUI
 import time
 
@@ -39,6 +40,7 @@ class Display(object):
 		self.window = GUI(180)	#window degree
 		self.defineWin()
 		self.controll = Controll(self.window)
+		#self.controll = MatrixOrbital(self.window, 'COM5')
 		self.font = ['Arial', 10]
 		#write on display first screen 
 		self.rewrite()
@@ -249,7 +251,7 @@ class Display(object):
 				new_joystick = self.joystick()
 				if joystick_old != new_joystick or new_joystick:
 					break
-				time.sleep(0.1)
+				#time.sleep(0.1)
 			#joystick setting
 			if new_joystick == 'up':
 				menu_selected -= 1
@@ -462,11 +464,13 @@ class Display(object):
 		pass
 
 display = Display()
-display.status = ("Status jak svina")
-display.message = ("Message jak svina")
-display.error_win = ("Error jak svina")
-time.sleep(2)
-for i in range(5000):
-	display.message.clear()
-	display.message ="aaaaa {0}".format(i)
-	time.sleep(1)
+display.selectNumber("select number", 1 , 1)
+#display.menu('Menu', ['prvni', 'druhy', 'treti', 'ctvrty'])
+# display.status = ("Status jak svina")
+# display.message = ("Message jak svina")
+# display.error_win = ("Error jak svina")
+# time.sleep(2)
+# for i in range(5000):
+# 	display.message.clear()
+# 	display.message ="aaaaa {0}".format(i)
+# 	time.sleep(1)

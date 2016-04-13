@@ -36,19 +36,34 @@ class GUI(object):
 		self.image = Image.new('1', (self.display_width, self.display_height))
 		self.draw = ImageDraw.Draw(self.image)
 
-	def getBitmap(self):
+	def getBitmap(self, vertical = True):
 		"""
 			Get finish picture which has to show on display - generating bitmap array
 		"""
+
 		d = [""]*1536
-		self.finall_image = self.image.rotate(self.rotation)
-		dat = self.finall_image.load()
-		page = 0
-		for i in range(0, self.display_height):
-			if i%8 == 0 and i != 0:
-				page += 1
-			for c in range(0, self.display_width):
-				d[(page * self.display_width) + c] += str(dat[(c,i)])
+		if vertical:
+			#for ist3020
+			self.finall_image = self.image.rotate(self.rotation)
+			dat = self.finall_image.load()
+			page = 0
+			for i in range(0, self.display_height):
+				if i%8 == 0 and i != 0:
+					page += 1
+				for c in range(0, self.display_width):
+					d[(page * self.display_width) + c] += str(dat[(c,i)])
+		else:
+			#matrix orbital
+			dat = self.image.load()
+			data = ""
+			c = 1
+			for r in range(64):
+				for l in range(192):
+					data += str(dat[(l, r)])
+
+			for i in range(1536):
+				d[i] = data[i*8:(i*8)+8]
+			#for matrix orbithal
 		self.data = [int(i,2) for i in d]
 
 	def addMultilineText(self, text, size = 10, x = 0, y = 0, align = "left", f = 'Arial', spacing = 1, fill = 1):
