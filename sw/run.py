@@ -4,6 +4,32 @@ from controll import Controll
 from window import GUI
 import time
 
+class Win(object):
+	"""
+		class is under Display class
+		main function of this class is creating and managing windows
+		adding text and clear it
+	"""
+	def __init__(self, disp, win, opts):
+		self.disp = disp
+		self.win = win
+		self.opts = opts
+
+	def __set__(self, obj, value):
+		"""
+			in variable valus is text which has to show on display
+		"""
+		self.disp.font = self.opts['font']
+		self.disp.text(value, [0, self.opts['rect'][0][1]], self.opts['alignment'][0], 1, 1)
+		self.disp.rewrite()
+
+	def clear(self):
+		"""
+			clear display
+		"""
+		self.disp.clearPartOfBuffer(self.opts['rect'], 0)
+		self.disp.rewrite()
+
 class Display(object):
 	"""There are main library of display"""
 	def __init__(self):
@@ -11,10 +37,27 @@ class Display(object):
 			initialization for hw controll and gui part
 		"""
 		self.window = GUI(180)	#window degree
+		self.defineWin()
 		self.controll = Controll(self.window)
 		self.font = ['Arial', 10]
 		#write on display first screen 
 		self.rewrite()
+
+	def defineWin(self):
+		for win, opts in\
+			[('main_win',   {'rect':      ((0, 0),  (192,64)),
+				'font':      ['Arial', 10],
+				'alignment': ('left', 'top')}),
+			(	'status',     {'rect':      ((0, 0),  (192, 19)),
+				'font':      ['Arial', 10],
+				'alignment': ('center', 'center')}),
+			(	'message',    {'rect':      ((0, 20), (192, 44)),
+				'font':      ['Arial', 10],
+				'alignment': ('left', 'top')}),
+			('error_win',  {'rect':      ((0, 45), (192, 64)),
+			'font':      ['Arial', 10],
+			'alignment': ('left', 'top')})]:
+			setattr(Display, win, Win(self, win, opts))
 
 	def rotate(self, degree):
 		"""
@@ -35,6 +78,13 @@ class Display(object):
 			reset (erase) window (GUI) buffer
 		"""
 		return self.window.reset()
+
+	def clearPartOfBuffer(self, position = [[0,0], [192, 64]], fill = False):
+		"""
+			clear part of buffer
+				position - [[x0,y0], [x1,y1]]
+		"""
+		return self.window.clear(position)
 
 	def reset(self):
 		"""
@@ -411,21 +461,12 @@ class Display(object):
 		"""
 		pass
 
-new = Display()
-
-new.checkbox('Checkbox test', ['Question 1', 'Question 2', 'Question 3', 'Question 4', 'Question 5', 'Question 6'])
-
-#new.question("Are you OK ??")
-
-# menu_title = "Menu title"
-# menu_data = ['Kratka polozka v menu 1', 'Nejake cislo 2', 'Hodne moc dlouhatanska polozka 3', 'Polozka cislo 4']
-# print(new.menu(menu_title, menu_data))
-# #new.test()
-# text = "From the very beginning of Android, Apple has been complaining that its Android competitors are ripping off its iPhone designs. Whether the culprit is the Samsung Galaxy S, the HTC One A9, or the ZTE Whatever, Apple is all too happy to remind the world that it's the leader and Android device makers are its followers. Well, things have been changing lately, and today's debut of the Huawei P9 adds momentum to a growing tide of distinctive new phones coming out of China — ones that aren't defined by a religious adherence to photocopying the iPhone. The Huawei P9 and the Xiaomi Mi 5 before it are the harbingers of a much more dangerous rival to Apple, a set of Chinese manufacturers capable of crafting their own, attractive, even premium designs.Don't get me wrong, I'm not here to argue that the entire mobile industry has suddenly developed scruples about ripping off Apple's design work. Just a glance or two at Oppo's F1 Plus or Meizu's Pro 5 will tell you that iPhone imitations are still very much alive and thriving. But the substantive change that's taken place in the mobile industry recently is the recognition of the paramount importance of high-quality industrial design. Xiaomi poured two years of development work into the Mi 5, while Huawei  outspent Apple on research and development last year by more than a billion dollars. Those investments are aimed at long-term technical innovations, an important subset of which is the development and refinement of standout designs. The P9 has a similar metal construction to the iPhone, but it feels different and, thanks to its idiosyncratic pair of camera eyes, looks different too.The copying of Apple has evolved. It's less literal now, as companies strive to recreate the essence of Apple's success, whether it be through vertical integration (as with Huawei and its in-house processor design), positive brand associations, or simple aesthetic and tactile appeal. Apple is still the Michael Jordan that every Chinese smartphone manufacturer looks up to, but instead of trying to dunk with their tongues sticking out or shoot fadeaway jumpers, these rising stars are developing their own ways of scoring points with consumers. Instead of imitating, they are emulating.There's no other way to interpret this development than as decidedly good news. Huawei has gone from routinely copying Sony's Xperia Z designs — culminating in the utterly anonymous Huawei P8 last year — to defining its own look and feel, as well as staking a claim for technological leadership with its unique camera setup. The dual-camera system on the Huawei P9 is not attempting to serve up fresh gimmicks, and is instead targeted at improving contrast, gathering more light, and generally making every photo look as good as it can possibly be. I'm not yet sure how well Huawei has executed this plan, but I can already say that the concept makes sense from a photographer's perspective and shows the right ambition to get ahead rather than chase from behind. Plus, Huawei is doing the whole two-camera trick without resorting to an unattractive camera wart. There's no Apple blueprint for making that happen, so what we're witnessing now is Huawei flexing its own engineering muscle."
-# new.textArea(text)
-print(new.selectNumber("Choose number", 1,2))
-while 1:
-	new.led(True)
-	time.sleep(0.5)
-	new.led(False)
-	time.sleep(0.5)
+display = Display()
+display.status = ("Status jak svina")
+display.message = ("Message jak svina")
+display.error_win = ("Error jak svina")
+time.sleep(2)
+for i in range(5000):
+	display.message.clear()
+	display.message ="aaaaa {0}".format(i)
+	time.sleep(1)

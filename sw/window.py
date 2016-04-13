@@ -2,7 +2,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-system_fonts = {'Arial' : 'arial.ttf'}
+system_fonts = {'Arial' : 'arial.ttf', 'GameOver' : 'DS-DIGI.ttf'}
 disp_width = 192
 disp_height = 64
 
@@ -205,3 +205,11 @@ class GUI(object):
 		"""
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
 		return self.draw.textsize(str(text), font)
+
+	def clear(self, position = [[0,0], [192, 64]], fill = False):
+		"""
+			clear part of window wchich is defined by position
+				position - [[x0, y0], [x1, y1]]
+			basicly add white place - rectangle
+		"""
+		self.draw.rectangle([position[0][0], position[0][1], position[1][0], position[1][1]], fill = fill, outline = fill)
