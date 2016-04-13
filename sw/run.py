@@ -299,12 +299,12 @@ class Display(object):
 				joy = self.joystick()
 				#can down
 				if (c + printed_lines) < len(text_array):
-					if joy == 'down':
+					if joy == 'down' or joy == "right":
 						c += printed_lines
 						break
 				#can up
 				if c > 0:
-					if joy == 'up':
+					if joy == 'up' or joy == "left":
 						c -= printed_lines
 						if c < 0:
 							c = 0
@@ -476,7 +476,7 @@ class Display(object):
 display = Display()
 
 display.selectNumber("select number", 1 , 1)
-
+display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
 display.status = ("Status jak svina")
 display.message = ("Message jak svina")
 display.error_win = ("Error jak svina")
