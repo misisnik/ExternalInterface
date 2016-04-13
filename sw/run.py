@@ -333,6 +333,10 @@ class Display(object):
 			self.line([[win / 2,29],[win / 2 ,45]], 1)
 			self.line([[win + rectangle_width + (win /2 ),29],[win + rectangle_width + (win / 2) ,45]], 1)
 
+			self.font = ['Arial', 7]
+			self.lineText(str('-{0}'.format(int(10/step) * step)), [0, 13], "center")
+			self.lineText(str('+{0}'.format(int(10/step) * step)), [0, 56], "center")
+
 			#show choosen 
 			self.font = ['Arial', 17]
 			choosen_width, choosen_height = self.lineText(str(choosen), [0,29], "center", 0)
@@ -373,6 +377,12 @@ class Display(object):
 					break
 				elif joy == "right":
 					choosen += step
+					break
+				elif joy == "up" and choosen > 10:
+					choosen -= int(10/step) * step
+					break
+				elif joy == "down":
+					choosen += int(10/step) * step
 					break
 				time.sleep(0.005)
 
