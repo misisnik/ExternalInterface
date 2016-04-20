@@ -6,7 +6,7 @@ import time
 #main class
 ############################################
 class Controll(object):
-	def __init__(self, gui):
+	def __init__(self, gui, register = ['0'] * 8):
 		"""
 			Authenticate and inicialization display for fast useing
 		"""
@@ -14,12 +14,16 @@ class Controll(object):
 		self.display_buffer = [''] * 1536
 		#spi buffer
 		self.spi_buffer = ''
+		#register buffer
+		self.shift_register = register
 		#reverse display variable
 		self.reverse = False
 		#last dc (latch) for display
 		self.last_display_dc = False
 		#first ve have to inicialization mcp2210
 		self.init_mcp2210()
+		#set shift register
+		self.SetShiftRegister()
 		#next is display ist3020 inicialization
 		self.init_display()
 		#gui
@@ -61,7 +65,7 @@ class Controll(object):
 		self.communication.chip_settings = gpio_settings
 		#and also direction
 		for i in range(0,9):
-			if i == 4 or i == 5 or i == 6 or i == 7:
+			if i == 0 or i == 1 or i == 4 or i == 5 or i == 6:
 				self._gpio_direction[i] = 0x01
 			else:
 				self._gpio_direction[i] = 0x00
@@ -298,6 +302,20 @@ class Controll(object):
 			#and try to again call this function
 			return self.Buttons()
 
+	def SetShiftRegister(self):
+		"""
+			set shift register from self.shift_register buffer
+		"""
+		data = int("".join(self.shift_register[::-1]),2)
+		self._gpio[2] = True
+		self.WriteByte([chr(data)], True)
+		#register latch
+		self._gpio[7] = False
+		time.sleep(0.1)
+		self._gpio[7] = True
+		self._gpio[2] = self.last_display_dc
+
+
 	def setErrorLed(self, status):
 		"""
 			set error set 	
@@ -313,7 +331,7 @@ class Controll(object):
 	def exceptionConnect(self):
 		while 1:
 			try:
-				self.__init__(self.gui)
+				self.__init__(self.gui, self.shift_register)
 				#and rewrite display
 				self.RewriteDisplay()
 				break

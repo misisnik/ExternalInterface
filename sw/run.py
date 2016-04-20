@@ -183,6 +183,22 @@ class Display(object):
 		"""
 		return self.controll.Buttons()
 
+	def readyButtons(self, data, s = '1'):
+		"""
+			this function trigger LED in OK and NG button
+				data - 'OK' for ok, 'NG' for NG and 'BOTH' for BOTH
+		"""
+		if not s: s = '0'
+		if data == 'OK':
+			self.controll.shift_register[3] = s
+		elif data == 'NG':
+			self.controll.shift_register[2] = s
+		elif data == 'BOTH':
+			self.controll.shift_register[2] = s
+			self.controll.shift_register[3] = s
+
+		self.controll.SetShiftRegister()
+
 	def led(self, status):
 		"""
 			this function care about led
@@ -417,10 +433,14 @@ class Display(object):
 		self.line([[150,63],[153,60]], 1)
 		self.lineText('NG', [164, 47])
 		self.rewrite()
+
+		#set buttons
+		self.readyButtons('BOTH')
 		while 1:
 			#load buttons and w8 for push OK or NG
 			buttons = self.buttons()
 			if buttons in ['OK', 'NG']:
+				self.readyButtons('BOTH', False)
 				return buttons
 			time.sleep(0.1)
 
@@ -433,6 +453,7 @@ class Display(object):
 		"""
 		position = 0
 		page = 0
+		self.readyButtons('OK')
 		data_result = [False] * len(data)
 		while 1:
 			self.resetBuffer()
@@ -460,6 +481,7 @@ class Display(object):
 			#joystick
 			while 1:
 				if self.buttons() == 'OK':
+					self.readyButtons('OK', False)
 					return data_result
 				joy = self.joystick()
 				if joy == 'up' and position > 0:
@@ -485,6 +507,7 @@ class Display(object):
 display = Display()
 display.question('Do you agree???')
 display.selectNumber("select number", 1 , 1)
+display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
 display.test()
 
 display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
