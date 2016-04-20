@@ -177,6 +177,12 @@ class Display(object):
 		"""
 		return self.controll.Joystick()
 
+	def buttons(self):
+		"""
+			this function case of 2 buttons OK and NG
+		"""
+		return self.controll.Buttons()
+
 	def led(self, status):
 		"""
 			this function care about led
@@ -413,9 +419,9 @@ class Display(object):
 		self.rewrite()
 		while 1:
 			#load buttons and w8 for push OK or NG
-			# buttons = self.buttons()
-			# if buttons != None:
-			# 	return buttons
+			buttons = self.buttons()
+			if buttons in ['OK', 'NG']:
+				return buttons
 			time.sleep(0.1)
 
 	def checkbox(self, title, data):
@@ -453,8 +459,8 @@ class Display(object):
 			self.rewrite()
 			#joystick
 			while 1:
-				# if self.buttons():
-				# 	return data_result
+				if self.buttons() == 'OK':
+					return data_result
 				joy = self.joystick()
 				if joy == 'up' and position > 0:
 					position -= 1
@@ -471,11 +477,16 @@ class Display(object):
 		"""
 			just main part of this class - usually add text and so on.... for testing
 		"""
+		self.window.addImage()
+		self.rewrite()
+		exit()
 		pass
 
 display = Display()
-
+display.question('Do you agree???')
 display.selectNumber("select number", 1 , 1)
+display.test()
+
 display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
 display.status = ("Status jak svina")
 display.message = ("Message jak svina")

@@ -272,6 +272,32 @@ class Controll(object):
 			#and try to again call this function
 			return self.Joystick()
 
+	def Buttons(self):
+		"""
+			return which button is pressed
+		"""
+		#reset gpio -> load new values
+		try:
+			self._gpio._value = None
+			gpio = self._gpio
+
+			if gpio[0] == 1 and gpio[1] == 1:
+				#both
+				return 'BOTH'
+			if gpio[0] == 1:
+				#OK button
+				return 'OK'
+			if gpio[1] == 1:
+				#NG
+				return 'NG'
+			return False
+
+		except ValueError as e:
+			#failed to open hid try to connect
+			self.exceptionConnect()
+			#and try to again call this function
+			return self.Buttons()
+
 	def setErrorLed(self, status):
 		"""
 			set error set 	
