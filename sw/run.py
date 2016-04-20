@@ -199,6 +199,38 @@ class Display(object):
 
 		self.controll.SetShiftRegister()
 
+	def sound(self, data):
+		"""
+			this function trigger BUZZER
+		"""
+		if data == 'a':
+			self.controll.shift_register[4] = '1'
+			self.controll.shift_register[5] = '0'
+			self.controll.shift_register[6] = '0'
+			self.controll.shift_register[7] = '0'
+		elif data == 'b':
+			self.controll.shift_register[4] = '0'
+			self.controll.shift_register[5] = '1'
+			self.controll.shift_register[6] = '0'
+			self.controll.shift_register[7] = '0'
+		elif data == 'c':
+			self.controll.shift_register[4] = '0'
+			self.controll.shift_register[5] = '0'
+			self.controll.shift_register[6] = '1'
+			self.controll.shift_register[7] = '0'
+		elif data == 'd':
+			self.controll.shift_register[4] = '0'
+			self.controll.shift_register[5] = '0'
+			self.controll.shift_register[6] = '0'
+			self.controll.shift_register[7] = '1'
+		else:
+			self.controll.shift_register[4] = '0'
+			self.controll.shift_register[5] = '0'
+			self.controll.shift_register[6] = '0'
+			self.controll.shift_register[7] = '0'
+		self.controll.SetShiftRegister()
+
+
 	def led(self, status):
 		"""
 			this function care about led
@@ -499,6 +531,15 @@ class Display(object):
 		"""
 			just main part of this class - usually add text and so on.... for testing
 		"""
+		self.readyButtons('BOTH')
+		while 1:
+			for i in range(ord('a'), ord('d')):
+				self.sound(chr(i))
+				time.sleep(0.1)
+			if self.buttons() == 'BOTH':
+				self.sound(False)
+				break
+		self.readyButtons('BOTH', False)
 		self.window.addImage()
 		self.rewrite()
 		exit()
