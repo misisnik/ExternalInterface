@@ -628,6 +628,30 @@ class Display(object):
 		self.lineText("{0}%".format(fill), [0, 26], 'center')
 		self.rewrite()
 
+	def quantity(self, title, pieces, done = 0, percent_line = True):
+		"""
+			widget for revew quantity blocks
+				pieces - how manny pieces are in line
+				done - how many pieces is filled (done)
+				percent_line - show recangle in percent line
+		"""
+		if done>pieces:
+			return False
+		self.resetBuffer()
+		self.title(title)
+		self.rectangle([[-1,40],[192,60]], 0)
+
+		self.font = ['Arial', 17]
+		self.lineText("{0}/{1}".format(done,pieces), [0, 20], "center")
+
+		if percent_line:
+			pos = int((((done * 100)/pieces)/100)*192)
+			self.rectangle([[0, 41],[pos,59]], 1)
+		piece = int(192/pieces)
+		for i in range(done):
+			self.rectangle([[(i*piece),41],[(i*piece) + piece, 59]], 1)
+		self.rewrite()
+
 	def test(self):
 		"""
 			just main part of this class - usually add text and so on.... for testing
@@ -647,15 +671,18 @@ class Display(object):
 		pass
 
 display = Display()
+display.quantity('Box quantity', 1000, 789)
+exit()
 
 for i in range(101):
 	display.rectangleLoader('Rectangle loader', i)
 for i in range(101):
 	display.circleLoader('Circle loader', i)
-# display.question('Do you agree???')
-# display.selectNumber("select number", 1 , 1)
-# display.selectNumber2("select number", 1 , 1)
-# display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
+
+display.question('Do you agree???')
+display.selectNumber("select number", 1 , 1)
+display.selectNumber2("select number", 1 , 1)
+display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
 
 
 display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
