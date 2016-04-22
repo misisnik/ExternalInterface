@@ -130,9 +130,15 @@ class Display(object):
 		"""
 		return self.window.addRectangle(position[0], position[1], fill)
 
-	def elipse(self, position, fill = True):
+	def arc(self, position, first, second, fill = 1):
 		"""
-			add elipse to screen buffer
+			add part of ellipse
+		"""
+		return self.window.addArc(first, second, position[0], position[1], fill)
+
+	def ellipse(self, position, fill = True):
+		"""
+			add ellipse to screen buffer
 				position - [[x0, y0], [x1, y1]]
 				fill - True -> is filled px, False -> is doesn't filled just borderline has
 		"""
@@ -328,6 +334,7 @@ class Display(object):
 				position - [x, y]
 				align - left, center, right
 		"""
+		self.readyButtons('BOTH')
 		printed_text = text
 		per_page = 0
 		text_array  = []
@@ -353,6 +360,8 @@ class Display(object):
 			while 1:
 				joy = self.joystick()
 				#can down
+				if self.buttons() == 'BOTH':
+					return
 				if (c + printed_lines) < len(text_array):
 					if joy == 'down' or joy == "right":
 						c += printed_lines
@@ -582,6 +591,43 @@ class Display(object):
 					continue
 				break
 
+	def circleLoader(self, title,  fill = 0):
+		"""
+			widget for circle circleLoader
+				title - title
+				fill - percent of filling
+		"""
+		pos = [129,0]
+		self.resetBuffer()
+		self.ellipse([[pos[0] + 0, 0], [pos[0] + 63, 63]], 0)
+		self.ellipse([[pos[0] + 5, 5], [pos[0] + 58, 58]], 0)
+
+		show = ((fill * 360)/100) - 90
+		self.arc([[pos[0] + 2, 2], [pos[0] + 61, 61]], -90, show, 1)
+		self.arc([[pos[0] + 3, 3], [pos[0] + 60, 60]], -90, show, 1)
+
+		self.font = ['Arial', 20]
+		self.lineText("{0}%".format(fill), [0, 20], "center", align_parameter = 66)
+
+		self.lineText(title, [0, 20], "left")
+
+		self.rewrite()
+
+	def rectangleLoader(self, title, fill = 0):
+		"""
+			widget for rectangle loader
+				title - title
+				fill - percent of filling
+		"""
+		self.resetBuffer()
+		self.title(title)
+		self.rectangle([[3,40],[188,60]], 0)
+		show = ((fill * 183)/100)
+		self.rectangle([[4,41],[show+4,59]], 1)
+		self.font = ['Arial', 10]
+		self.lineText("{0}%".format(fill), [0, 26], 'center')
+		self.rewrite()
+
 	def test(self):
 		"""
 			just main part of this class - usually add text and so on.... for testing
@@ -601,6 +647,11 @@ class Display(object):
 		pass
 
 display = Display()
+
+for i in range(101):
+	display.rectangleLoader('Rectangle loader', i)
+for i in range(101):
+	display.circleLoader('Circle loader', i)
 # display.question('Do you agree???')
 # display.selectNumber("select number", 1 , 1)
 # display.selectNumber2("select number", 1 , 1)
