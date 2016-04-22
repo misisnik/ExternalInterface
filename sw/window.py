@@ -51,6 +51,8 @@ class GUI(object):
 				if i%8 == 0 and i != 0:
 					page += 1
 				for c in range(0, self.display_width):
+					if dat[(c,i)] == 255:
+						dat[(c,i)] = 1
 					d[(page * self.display_width) + c] += str(dat[(c,i)])
 		else:
 			#matrix orbital
@@ -60,7 +62,6 @@ class GUI(object):
 			for r in range(64):
 				for l in range(192):
 					data += str(dat[(l, r)])
-
 			for i in range(1536):
 				d[i] = data[i*8:(i*8)+8]
 			#for matrix orbithal
@@ -127,7 +128,7 @@ class GUI(object):
 		self.draw.multiline_text((x,y), str(text), font=font, fill = fill, align = align, spacing = spacing)
 		return (lines, lines_to_print, new_text)
 
-	def addText(self, text, size, x = 0, y = 0, align = "left", f = 'Arial', fill = 1):
+	def addText(self, text, size, x = 0, y = 0, align = "left", f = 'Arial', fill = 1, align_parameter = 0):
 		"""
 			Add text
 		"""
@@ -137,9 +138,9 @@ class GUI(object):
 		#align setting if is just 1line text -> smaller than self.display_width
 		if text_width < self.display_width and x == 0:
 			if align == "center":
-				x = (self.display_width - text_width)/2
+				x = ((self.display_width - text_width)/2) + align_parameter
 			elif align == "right":
-				x = self.display_width - text_width
+				x = self.display_width - text_width + align_parameter
 
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
 		self.changed = True
@@ -228,3 +229,12 @@ class GUI(object):
 			basicly add white place - rectangle
 		"""
 		self.draw.rectangle([position[0][0], position[0][1], position[1][0], position[1][1]], fill = fill, outline = fill)
+
+	def addImage(self):
+		"""
+			add image from file
+		"""
+		self.changed = True
+		icon = Image.open('img/test.bmp').convert('1')
+		#print(b.getcolors())
+		self.image.paste(icon, (0,0))

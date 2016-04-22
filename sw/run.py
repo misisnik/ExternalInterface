@@ -108,7 +108,7 @@ class Display(object):
 		"""
 		return self.window.addMultilineText(text, self.font[1], position[0], position[1], align, self.font[0], spacing, fill)
 
-	def lineText(self, text, position = [0, 0], align = 'left', fill = 1):
+	def lineText(self, text, position = [0, 0], align = 'left', fill = 1, align_parameter = 0):
 		"""
 			add just one line text
 				text - string of text
@@ -120,7 +120,7 @@ class Display(object):
 			also as usually font u can change beore this function by variable
 			Display.font = ['Arial', 10] -> means font name and font size
 		"""
-		return self.window.addText(text, self.font[1], position[0], position[1], align, self.font[0], fill)
+		return self.window.addText(text, self.font[1], position[0], position[1], align, self.font[0], fill, align_parameter)
 
 	def rectangle(self, position, fill = True):
 		"""
@@ -321,7 +321,7 @@ class Display(object):
 			#and reset window -> erase window in GUI part
 			self.resetBuffer()
 
-	def textArea(self, text, position = [0, 0], align = "left"):
+	def textArea(self, text, position = [0, 0], align = "left", percent_style = False):
 		"""
 			Create text area into gui buffer -> it can be more pages, and its remote by joystick
 				text - multiline text string
@@ -343,9 +343,10 @@ class Display(object):
 			#print line
 			self.rectangle([[0,59],[192,63]], False)
 			#filling
-
-			self.rectangle([[-1,60], [int((192/len(text_array))*(c + printed_lines)), 62]])
-
+			if percent_style:
+				self.rectangle([[-1,60], [int((192/len(text_array))*(c + printed_lines)), 62]])
+			else:
+				self.rectangle([[int((192/len(text_array))*c), 60], [int((192/len(text_array))*(c + printed_lines)), 62]])
 			self.rewrite()
 
 			#parse new text 
@@ -419,6 +420,60 @@ class Display(object):
 				self.lineText(str(i), [pos, 33])
 				if count == 2:
 					break
+			self.rewrite()
+
+			#joystick
+			while 1:
+				joy = self.joystick()
+				if joy == "center":
+					return choosen
+				elif joy == "left" and choosen > start:
+					choosen -= step
+					break
+				elif joy == "right":
+					choosen += step
+					break
+				elif joy == "up" and choosen > 10:
+					choosen -= int(10/step) * step
+					break
+				elif joy == "down":
+					choosen += int(10/step) * step
+					break
+				time.sleep(0.005)
+
+	def selectNumber2(self, title, start, step):
+		"""
+			selecting number 2 format -  from x step is step
+				from
+				step
+			returned value of choosen number
+		"""
+		choosen = start
+		while 1:
+			self.resetBuffer()
+
+			self.rectangle([[116, 17], [166, 48]])
+
+			self.rectangle([[122, 0], [160, 18]], 0)
+			self.rectangle([[122, 47], [160, 63]], 0)
+			self.rectangle([[90, 20], [117, 45]], 0)
+			self.rectangle([[165, 20], [191, 45]], 0)
+
+			#and two lines
+			self.font = ['Arial', 15]
+			self.lineText('Select \nnumber', [0, 15], "left")
+			self.font = ['Arial', 10]
+			self.lineText(str('-{0}'.format(int(10/step) * step)), [0, 5], "center", align_parameter = 45)
+			self.lineText(str('+{0}'.format(int(10/step) * step)), [0, 50], "center", align_parameter = 45)
+			self.lineText(str('-{0}'.format(step)), [0, 27], "center", align_parameter = 10)
+			self.lineText(str('+{0}'.format(step)), [0, 27], "right", align_parameter = -6)
+			#show choosen 
+			self.font = ['Arial', 17]
+			choosen_width, choosen_height = self.lineText(str(choosen), [0,25], "center", 0, align_parameter = 45)
+			self.font = ['Arial', 10]
+
+			count = 0
+
 			self.rewrite()
 
 			#joystick
@@ -546,12 +601,14 @@ class Display(object):
 		pass
 
 display = Display()
-display.question('Do you agree???')
-display.selectNumber("select number", 1 , 1)
-display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
-display.test()
+# display.question('Do you agree???')
+# display.selectNumber("select number", 1 , 1)
+# display.selectNumber2("select number", 1 , 1)
+# display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
+
 
 display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
+display.test()
 display.status = ("Status jak svina")
 display.message = ("Message jak svina")
 display.error_win = ("Error jak svina")
