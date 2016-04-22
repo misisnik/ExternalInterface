@@ -52,11 +52,14 @@ class MatrixOrbital():
 		self._ser.baudrate     = 19200
 		self._ser.timeout      = 1
 		self._ser.writeTimeout = 1
-
+		self.shift_register = ['0'] * 8 # virtual shift register
 		self._ser.open()
 		#self.leds = tuple([Led(self._ser, n) for n in range(3)])
 		self._handle_startup()
 		self.gui = gui
+
+		#display buffer
+		self.display_buffer = [0] * 1536
 		#self._fonts = fonts()
 
 	def _handle_startup(self):
@@ -76,8 +79,17 @@ class MatrixOrbital():
 
 			The display has 8 pages each is one write from buffer
 		"""
-		self.gui.getBitmap()
-		self.write_bitmap(self.gui.data)
+		if self.gui.changed:
+			self.gui.getBitmap()	#get new bitmap of gui
+			self.gui.changed = False
+		#return self.write_bitmap(self.gui.data,1)
+		picture = self.gui.data
+		if picture == self.display_buffer:
+			return
+		for i in range(64):
+			if picture[i*24:(i*24) + 24] != self.display_buffer[i*24:(i*24) + 24]:
+				self.write_bitmap(self.gui.data[i*24:(i*24) + 24], i)
+		self.display_buffer = picture
 
 	def read_user_data(self):
 		self._ser.write(b'\xFE\x35')
@@ -87,12 +99,13 @@ class MatrixOrbital():
 		assert len(data) == 16
 		self._ser.write(b'\xFE\x34' + bytes(data))
 
-	def write_bitmap(self, data):
+	def write_bitmap(self, data, row):
 		"""
 			just write bitmap
 		"""
 		try:
-			self._ser.write(b'\xFE\x64\x00\x00\xC0\x40' + bytes(data))
+			rows = [int(str(row))]
+			self._ser.write(b'\xFE\x64\x00' + bytes(rows) + b'\xC0\x01' + bytes(data))
 		except ValueError as e:
 			#failed to open hid try to connect
 			self.exceptionConnect()
@@ -122,31 +135,29 @@ class MatrixOrbital():
 			Get status of joystick position
 		"""
 		#reset gpio -> load new values
-		while 1:
-			try:
-				but = self._ser.read(1)
-				print(but)
-				if but == b'\x88':
-					#central button
-					return 'center'
-				if but == b'C':
-					#right
-					return 'right'
-				if but == b't':
-					#left
-					return 'left'
-				if but == b'W':
-					#up
-					return 'up'
-				if but == b'\xaa':
-					#down
-					return 'down'
-				return False
-			except ValueError as e:
-				#failed to open hid try to connect
-				self.exceptionConnect()
-				#and try to again call this function
-				return self.Joystick()
+		try:
+			but = self._ser.read(1)
+			if but == b'\x88':
+				#central button
+				return 'center'
+			if but == b'C':
+				#right
+				return 'right'
+			if but == b't':
+				#left
+				return 'left'
+			if but == b'W':
+				#up
+				return 'up'
+			if but == b'\xaa':
+				#down
+				return 'down'
+			return False
+		except ValueError as e:
+			#failed to open hid try to connect
+			self.exceptionConnect()
+			#and try to again call this function
+			return self.Joystick()
 
 	def setErrorLed(self):
 		"""
@@ -186,3 +197,9 @@ class MatrixOrbital():
 				print(e)
 				time.sleep(1)
 		return True
+
+	def SetShiftRegister(self):
+		return False
+
+	def Buttons(self):
+		return False
