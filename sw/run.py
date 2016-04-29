@@ -361,7 +361,7 @@ class Display(object):
 				joy = self.joystick()
 				#can down
 				if self.buttons() == 'BOTH':
-					return
+					return self.readyButtons('BOTH', False)
 				if (c + printed_lines) < len(text_array):
 					if joy == 'down' or joy == "right":
 						c += printed_lines
@@ -667,17 +667,14 @@ class Display(object):
 		self.readyButtons('BOTH', False)
 		self.window.addImage()
 		self.rewrite()
-		exit()
-		pass
 
 display = Display()
 display.quantity('Box quantity', 1000, 789)
-exit()
 
 for i in range(101):
 	display.rectangleLoader('Rectangle loader', i)
-for i in range(101):
-	display.circleLoader('Circle loader', i)
+	# for i in range(101):
+	# 	display.circleLoader('Circle loader', i)
 
 display.question('Do you agree???')
 display.selectNumber("select number", 1 , 1)
@@ -687,6 +684,9 @@ display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
 
 display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
 display.test()
+display.status.clear()
+display.message.clear()
+display.error_win.clear()
 display.status = ("Status jak svina")
 display.message = ("Message jak svina")
 display.error_win = ("Error jak svina")
