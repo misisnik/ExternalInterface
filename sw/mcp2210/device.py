@@ -12,7 +12,12 @@ HID_SEND_BUFFER_OFFSET = (1 if 'nt' in os.name or 'windows' in os.name else 0)
 
 #buf should be an iterable of bytes with len <= 63
 def shift_buf(buf):
-    shifted = bytearray(len(buf)+HID_SEND_BUFFER_OFFSET+1)
+    if sys.platform.startswith('win') or sys.platform.startswith('win32'):
+        #windows
+        shifted = bytearray(len(buf)+HID_SEND_BUFFER_OFFSET+1)
+    else:
+        #linux
+        shifted = bytearray(len(buf))
     #shifted = bytearray(len(buf))
     for i in range(len(buf)):
         shifted[HID_SEND_BUFFER_OFFSET+i] = buf[i]
@@ -143,7 +148,7 @@ class MCP2210(object):
         self.eeprom = EEPROMData(self)
         self.cancel_transfer()
 
-    def sendCommand(self, command, lastone = None, old_response = False):
+    def sendCommand(self, command, lastone = None):
         """Sends a Command object to the MCP2210 and returns its response.
 
         Arguments:
@@ -168,7 +173,7 @@ class MCP2210(object):
 
         if response.status != 0:
             if response.status == 0xf8:
-                return self.sendCommand(command, None, response)
+                return self.sendCommand(command, None)
             else:
                 raise CommandException(response.status)
 
