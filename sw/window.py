@@ -2,7 +2,7 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-system_fonts = {'Arial' : 'arial.ttf', 'GameOver' : 'DS-DIGI.ttf'}
+system_fonts = {'Arial' : 'arial.ttf', 'Big' : '8-BIT WONDER.ttf', 'Tiny' : 'tiny.ttf'}
 disp_width = 192
 disp_height = 64
 

@@ -51,13 +51,13 @@ class Display(object):
 				'font':      ['Arial', 10],
 				'alignment': ('left', 'top')}),
 			(	'status',     {'rect':      ((0, 0),  (192, 19)),
-				'font':      ['Arial', 10],
+				'font':      ['Big', 12],
 				'alignment': ('center', 'center')}),
 			(	'message',    {'rect':      ((0, 20), (192, 44)),
 				'font':      ['Arial', 10],
 				'alignment': ('left', 'top')}),
 			('error_win',  {'rect':      ((0, 45), (192, 64)),
-			'font':      ['Arial', 10],
+			'font':      ['Tiny', 7],
 			'alignment': ('left', 'top')})]:
 			setattr(Display, win, Win(self, win, opts))
 
@@ -669,24 +669,30 @@ class Display(object):
 		self.rewrite()
 
 display = Display()
-display.quantity('Box quantity', 1000, 789)
+# display.font = ['test', 7]
+# display.text('Priliz zlutoucky kun se pasl na zelene louce')
+# display.rewrite()
+# exit()
+# display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
 
-for i in range(101):
-	display.rectangleLoader('Rectangle loader', i)
-	# for i in range(101):
-	# 	display.circleLoader('Circle loader', i)
+# display.quantity('Box quantity', 1000, 789)
 
-display.question('Do you agree???')
-display.selectNumber("select number", 1 , 1)
-display.selectNumber2("select number", 1 , 1)
-display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
+# for i in range(101):
+# 	display.rectangleLoader('Rectangle loader', i)
+# 	# for i in range(101):
+# 	# 	display.circleLoader('Circle loader', i)
+
+# display.question('Do you agree???')
+# display.selectNumber("select number", 1 , 1)
+# display.selectNumber2("select number", 1 , 1)
+# display.checkbox('title',['test1', 'test2', 'test3', 'test4', 'test5'])
 
 
-display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
-display.test()
-display.status.clear()
-display.message.clear()
-display.error_win.clear()
+# display.textArea('Text bakalářské práce je tištěn jednostranně na bílé stránky kancelářského papíru formátu A4. Pro základní text se používá písmo Times New Roman velikosti maximálně 12 (minimálně 11 bodů). Okraje stránek se volí 25 mm ze všech stran textu s jednoduchým řádkováním. Velikost písma u nadpisů různých úrovní je použita podle standardních typografických doporučení, např. 24 bodů tučně v nadpisech hlavních kapitol, 14 bodů tučně v nadpisech podkapitol první úrovně, 12 bodů tučně v nadpisech druhé úrovně apod. Uspořádání jednotlivých částí textu musí být přehledné a logické. Je třeba odlišit názvy kapitol a podkapitol - píše se malými písmeny kromě velkých začátečních písmen. Jednotlivé odstavce textu jsou odsazeny mezerou, první řádek odstavce můžeme být odsazen vždy o stejnou, předem zvolenou hodnotu. ')
+# display.test()
+# display.status.clear()
+# display.message.clear()
+# display.error_win.clear()
 display.status = ("Status jak svina")
 display.message = ("Message jak svina")
 display.error_win = ("Error jak svina")
