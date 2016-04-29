@@ -230,11 +230,26 @@ class GUI(object):
 		"""
 		self.draw.rectangle([position[0][0], position[0][1], position[1][0], position[1][1]], fill = fill, outline = fill)
 
-	def addImage(self):
+	def addImage(self, img, position = [0, 0], reverse = False):
 		"""
 			add image from file
+				img - file to load
 		"""
 		self.changed = True
-		icon = Image.open('img/test.bmp').convert('1')
-		#print(b.getcolors())
-		self.image.paste(icon, (0,0))
+		img = Image.open(img).convert('1')
+
+		width, height = img.size
+		if width > self.display_width or height > self.display_height:
+			#have to resize
+			img = img.resize((self.display_width, self.display_height), Image.NEAREST)
+
+		if not reverse:
+			pixdata = img.load()
+			for y in range(img.size[1]):
+				for x in range(img.size[0]):
+					if pixdata[x, y] == 255:
+						pixdata[x, y] = 0
+					else:
+						pixdata[x, y] = 1
+
+		self.image.paste(img, (position[0], position[1]))

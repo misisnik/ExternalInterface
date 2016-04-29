@@ -3,6 +3,7 @@
 from controll import Controll
 from matrix_orbital import MatrixOrbital
 from window import GUI
+import os
 import time
 
 class Win(object):
@@ -93,6 +94,14 @@ class Display(object):
 			Reset display - it means that reset array in window (gui) and those write via SPI
 		"""
 		return self.control.Reset()
+
+	def image(self, img, position = [0, 0], reverse = False):
+		"""
+			add image to window buffer
+				img - path of file
+				reverse - reverse image
+		"""
+		self.window.addImage(img, position, reverse)
 
 	def text(self, text, position = [0, 0], align = 'left', spacing = 1, fill = 1):
 		"""
@@ -669,6 +678,24 @@ class Display(object):
 		self.rewrite()
 
 display = Display()
+cis = 0
+for i in os.listdir("img/icon/16x16/"):
+	if i == "Thumbs.db":
+		continue
+	display.image("img/icon/16x16/{0}".format(i),[32*int(cis%6), int(cis/6)*32], True)
+
+	if cis == 10:
+		display.rewrite()
+		cis = 0
+		time.sleep(0.5)
+		display.resetBuffer()
+	else:
+		cis += 1
+exit()
+print(os.listdir("img/icon/"))
+display.image('test.png')
+display.rewrite()
+exit()
 # display.font = ['test', 7]
 # display.text('Priliz zlutoucky kun se pasl na zelene louce')
 # display.rewrite()
