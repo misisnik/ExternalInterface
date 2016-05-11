@@ -1,3 +1,11 @@
+"""
+display window
+====================
+.. moduleauthor:: Michal Sladecek <misisnik@gmail.com>
+.. autoclass:: GUI
+.. autofunction:: lib
+
+"""
 from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont

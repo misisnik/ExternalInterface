@@ -1,3 +1,12 @@
+"""
+display run
+====================
+.. moduleauthor:: Michal Sladecek <misisnik@gmail.com>
+.. autoclass:: Display
+.. autoclass:: Win
+.. autofunction:: lib
+
+"""
 """Top part of whole display software. There are mostly GUI commands"""
 
 from controll import Controll

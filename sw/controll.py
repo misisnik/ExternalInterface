@@ -1,3 +1,11 @@
+"""
+display controll
+====================
+.. moduleauthor:: Michal Sladecek <misisnik@gmail.com>
+.. autoclass:: Controll
+.. autofunction:: lib
+
+"""
 from mcp2210.commands import ChipSettings, SPISettings, USBSettings
 from mcp2210.device import MCP2210, CommandException
 import numbers
