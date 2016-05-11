@@ -3,7 +3,7 @@
   (general
     (links 167)
     (no_connects 0)
-    (area 74.604999 82.644999 226.755001 129.745001)
+    (area 62.204048 82.545 238.445953 130.395)
     (thickness 1.6)
     (drawings 40)
     (tracks 1253)
@@ -13,6 +13,11 @@
   )
 
   (page A4)
+  (title_block
+    (title "External user interface with USB")
+    (company "Michal Sladecek")
+  )
+
   (layers
     (0 F.Cu signal)
     (31 B.Cu signal)
@@ -3604,7 +3609,7 @@
   (segment (start 133.69 99.12) (end 133.69 99.94) (width 0.25) (layer F.Cu) (net 68))
   (segment (start 131.75 104.53) (end 131.11 105.17) (width 0.25) (layer F.Cu) (net 68))
   (segment (start 131.11 105.17) (end 129.55 106.73) (width 0.25) (layer F.Cu) (net 68) (tstamp 56F26093))
-  (segment (start 102.121 100.19052) (end 102.121 112.18948) (width 0.25) (layer F.Cu) (net 69) (status C00000))
+  (segment (start 102.121 100.19052) (end 102.121 112.18948) (width 0.25) (layer F.Cu) (net 69))
   (segment (start 102.1 117.6) (end 102.1 115.65) (width 0.25) (layer F.Cu) (net 69))
   (segment (start 102.1 115.65) (end 102.05 115.6) (width 0.25) (layer F.Cu) (net 69) (tstamp 5732E0CB))
   (segment (start 102.05 115.6) (end 102.05 112.26048) (width 0.25) (layer F.Cu) (net 69))
