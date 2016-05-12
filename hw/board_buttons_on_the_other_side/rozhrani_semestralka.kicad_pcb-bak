@@ -3,7 +3,7 @@
   (general
     (links 166)
     (no_connects 0)
-    (area 74.604999 82.624999 226.755001 129.765001)
+    (area 74.604999 82.624999 226.755001 121.335001)
     (thickness 1.6)
     (drawings 54)
     (tracks 1166)
@@ -2402,7 +2402,7 @@
   (gr_text "Tone generator" (at 132.65 118.85) (layer F.SilkS)
     (effects (font (size 0.8 0.8) (thickness 0.125)))
   )
-  (gr_text "Version 1.0.0\n2016" (at 213.66 86.22) (layer F.SilkS)
+  (gr_text "Version 1.0.0B\n2016" (at 213.66 86.22) (layer F.SilkS)
     (effects (font (size 1.1 1.1) (thickness 0.2)))
   )
   (gr_text "EXTERNAL USER\nINTERFACE \nWITH USB" (at 82.26 96.2) (layer F.SilkS)
