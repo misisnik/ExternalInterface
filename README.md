@@ -23,7 +23,41 @@ It contains:
 Installation
 ------------
 
-to doooooooooooooo
+	-Raspbian Jesee
+	---------------
+			$ apt-get update
+			$ sudo apt-get install git python3.4 python3-dev
+
+		install pip3 from git
+			$ git clone https://github.com/pypa/pip
+			$ cd pip
+			$ python3.4 setup.py install
+			$ cd ..
+			$ rm -r pip
+
+		install cython
+			$ apt-get install cython3
+
+		libusb
+			$ apt-get install libusb-1.0.0 libusb-1.0.0-dev libudev-dev
+
+		install cython-hidapi
+			$ git clone https://github.com/gbishop/cython-hidapi.git
+			$ cd cython-hidapi
+			$ python3 setup.py build
+			$ python3 setup.py install
+			$ cd ..
+			$ rm -r cython-hidapi
+
+		install Pillow
+			$ apt-get install libjpeg-dev
+			$ pip3 install pillow
+
+		install pyserial
+			$ pip3 install pyserial
+
+		-- display LIB
+		git clone https://github.com/misisnik/ExternalInterface
 
 
 Examples
