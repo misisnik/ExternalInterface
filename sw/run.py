@@ -688,10 +688,11 @@ class Display(object):
 
 display = Display()
 cis = 0
-for i in os.listdir("img/icon/16x16/"):
+ph = os.path.dirname(os.path.realpath(__file__))
+for i in os.listdir("{0}/img/icon/16x16/".format(ph)):
 	if i == "Thumbs.db":
 		continue
-	display.image("img/icon/16x16/{0}".format(i),[32*int(cis%6), int(cis/6)*32], True)
+	display.image("{0}/img/icon/16x16/{1}".format(ph, i),[32*int(cis%6), int(cis/6)*32], True)
 
 	if cis == 10:
 		display.rewrite()
