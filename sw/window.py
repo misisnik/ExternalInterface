@@ -12,7 +12,7 @@ from PIL import ImageFont
 
 import os
 
-system_fonts = {'Arial' : 'arial.ttf', 'Big' : '8-BIT WONDER.ttf', 'Tiny' : 'tiny.ttf'}
+system_fonts = {'Arial' : 'arial.ttf', 'Big' : 'big.ttf', 'Tiny' : 'tiny.ttf'}
 disp_width = 192
 disp_height = 64
 
