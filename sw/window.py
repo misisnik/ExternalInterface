@@ -10,6 +10,8 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+import os
+
 system_fonts = {'Arial' : 'arial.ttf', 'Big' : '8-BIT WONDER.ttf', 'Tiny' : 'tiny.ttf'}
 disp_width = 192
 disp_height = 64
@@ -131,7 +133,8 @@ class GUI(object):
 				x = self.display_width - text_width
 
 		#define font
-		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
+		ph = os.path.dirname(os.path.realpath(__file__))
+		font = ImageFont.truetype('{0}/fonts/{1}'.format(ph, system_fonts[f]), size)
 		self.changed = True
 		self.draw.multiline_text((x,y), str(text), font=font, fill = fill, align = align, spacing = spacing)
 		return (lines, lines_to_print, new_text)
@@ -150,7 +153,8 @@ class GUI(object):
 			elif align == "right":
 				x = self.display_width - text_width + align_parameter
 
-		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[f]), size)
+		ph = os.path.dirname(os.path.realpath(__file__))
+		font = ImageFont.truetype('{0}/fonts/{1}'.format(ph, system_fonts[f]), size)
 		self.changed = True
 		self.draw.text((x,y), str(text), font=font, fill = fill)	#can be draw.text....
 		return text_width, text_height
@@ -220,14 +224,16 @@ class GUI(object):
 		"""
 			get text size
 		"""
-		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
+		ph = os.path.dirname(os.path.realpath(__file__))
+		font = ImageFont.truetype('{0}/fonts/{1}'.format(ph, system_fonts[f]), size)
 		return self.draw.multiline_textsize(str(text), font)
 
 	def getTextSize(self, text, size, font = 'Arial'):
 		"""
 			get text size
 		"""
-		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
+		ph = os.path.dirname(os.path.realpath(__file__))
+		font = ImageFont.truetype('{0}/fonts/{1}'.format(ph, system_fonts[f]), size)
 		return self.draw.textsize(str(text), font)
 
 	def clear(self, position = [[0,0], [192, 64]], fill = False):
