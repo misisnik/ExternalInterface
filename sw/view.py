@@ -49,15 +49,11 @@ class Display(object):
 		"""
 		self.window = GUI(orientation)	#window degree
 		self.defineWin()
-		start_time = time.time()
 		self.control = Control(self.window)
-		print("a--- %s seconds ---" % (time.time() - start_time))
 		#self.control = MatrixOrbital(self.window, 'COM5')
 		self.font = ['Arial', 10]
 		#write on display first screen 
-		start_time = time.time()
 		self.rewrite()
-		print("b--- %s seconds ---" % (time.time() - start_time))
 
 	def defineWin(self):
 		for win, opts in\
