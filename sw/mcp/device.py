@@ -1,6 +1,6 @@
 
 import hid
-from mcp import commands
+from . import commands
 import time
 import sys
 import os
