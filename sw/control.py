@@ -1,8 +1,8 @@
 """
-display controll
+display control
 ====================
 .. moduleauthor:: Michal Sladecek <misisnik@gmail.com>
-.. autoclass:: Controll
+.. autoclass:: Control
 .. autofunction:: lib
 
 """
@@ -12,7 +12,7 @@ import time
 ############################################
 #main class
 ############################################
-class Controll(object):
+class Control(object):
 	def __init__(self, gui, register = ['0'] * 8):
 		"""
 			Authenticate and inicialization display for fast useing
@@ -236,7 +236,7 @@ class Controll(object):
 			reset picture on display + reset picture on gui buffer
 		"""
 		self.gui.reset()
-		self.controll.RewriteDisplay()
+		self.control.RewriteDisplay()
 
 	def Reverse(self, reverse = False):
 		"""

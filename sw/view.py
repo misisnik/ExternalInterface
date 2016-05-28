@@ -12,8 +12,7 @@ display run
 import os
 import time
 
-from controll import Controll
-from matrix_orbital import MatrixOrbital
+from control import Control
 from window import GUI
 
 class Win(object):
@@ -46,12 +45,12 @@ class Display(object):
 	"""There are main library of display"""
 	def __init__(self, orientation = 180):
 		"""
-			initialization for hw controll and gui part
+			initialization for hw control and gui part
 		"""
 		self.window = GUI(orientation)	#window degree
 		self.defineWin()
-		self.controll = Controll(self.window)
-		#self.controll = MatrixOrbital(self.window, 'COM5')
+		self.control = Control(self.window)
+		#self.control = MatrixOrbital(self.window, 'COM5')
 		self.font = ['Arial', 10]
 		#write on display first screen 
 		self.rewrite()
@@ -84,7 +83,7 @@ class Display(object):
 		"""
 			rewrite display from gui buffer
 		"""
-		return self.controll.RewriteDisplay()
+		return self.control.RewriteDisplay()
 
 	def resetBuffer(self):
 		"""
@@ -200,13 +199,13 @@ class Display(object):
 			this function maintenance of joystick
 			return is: up, down, left, right, or center
 		"""
-		return self.controll.Joystick()
+		return self.control.Joystick()
 
 	def buttons(self):
 		"""
 			this function case of 2 buttons OK and NG
 		"""
-		return self.controll.Buttons()
+		return self.control.Buttons()
 
 	def readyButtons(self, data, s = '1'):
 		"""
@@ -215,45 +214,45 @@ class Display(object):
 		"""
 		if not s: s = '0'
 		if data == 'OK':
-			self.controll.shift_register[3] = s
+			self.control.shift_register[3] = s
 		elif data == 'NG':
-			self.controll.shift_register[2] = s
+			self.control.shift_register[2] = s
 		elif data == 'BOTH':
-			self.controll.shift_register[2] = s
-			self.controll.shift_register[3] = s
+			self.control.shift_register[2] = s
+			self.control.shift_register[3] = s
 
-		self.controll.SetShiftRegister()
+		self.control.SetShiftRegister()
 
 	def sound(self, data):
 		"""
 			this function trigger BUZZER
 		"""
 		if data == 'a':
-			self.controll.shift_register[4] = '1'
-			self.controll.shift_register[5] = '0'
-			self.controll.shift_register[6] = '0'
-			self.controll.shift_register[7] = '0'
+			self.control.shift_register[4] = '1'
+			self.control.shift_register[5] = '0'
+			self.control.shift_register[6] = '0'
+			self.control.shift_register[7] = '0'
 		elif data == 'b':
-			self.controll.shift_register[4] = '0'
-			self.controll.shift_register[5] = '1'
-			self.controll.shift_register[6] = '0'
-			self.controll.shift_register[7] = '0'
+			self.control.shift_register[4] = '0'
+			self.control.shift_register[5] = '1'
+			self.control.shift_register[6] = '0'
+			self.control.shift_register[7] = '0'
 		elif data == 'c':
-			self.controll.shift_register[4] = '0'
-			self.controll.shift_register[5] = '0'
-			self.controll.shift_register[6] = '1'
-			self.controll.shift_register[7] = '0'
+			self.control.shift_register[4] = '0'
+			self.control.shift_register[5] = '0'
+			self.control.shift_register[6] = '1'
+			self.control.shift_register[7] = '0'
 		elif data == 'd':
-			self.controll.shift_register[4] = '0'
-			self.controll.shift_register[5] = '0'
-			self.controll.shift_register[6] = '0'
-			self.controll.shift_register[7] = '1'
+			self.control.shift_register[4] = '0'
+			self.control.shift_register[5] = '0'
+			self.control.shift_register[6] = '0'
+			self.control.shift_register[7] = '1'
 		else:
-			self.controll.shift_register[4] = '0'
-			self.controll.shift_register[5] = '0'
-			self.controll.shift_register[6] = '0'
-			self.controll.shift_register[7] = '0'
-		self.controll.SetShiftRegister()
+			self.control.shift_register[4] = '0'
+			self.control.shift_register[5] = '0'
+			self.control.shift_register[6] = '0'
+			self.control.shift_register[7] = '0'
+		self.control.SetShiftRegister()
 
 
 	def led(self, status):
@@ -261,7 +260,7 @@ class Display(object):
 			this function care about led
 				status - True or False
 		"""
-		return self.controll.setErrorLed(status)
+		return self.control.setErrorLed(status)
 
 	def title(self, title):
 		"""
@@ -819,7 +818,7 @@ class Snake(object):
         recalculate()
         return True
 
-    def controll(self):
+    def control(self):
     	dr = self.display.joystick()
     	if dr:
     		if dr == 'center':
@@ -846,7 +845,7 @@ def game():
 					display.readyButtons('BOTH', False)
 					break
 				snake.redrawDisplay()
-				snake.controll()
+				snake.control()
 				if not snake.move():
 					#game over
 					display.resetBuffer()
@@ -928,11 +927,11 @@ def buzzer():
 			tones_data += '1'
 		else:
 			tones_data += '0'
-	display.controll.shift_register[4] = tones_data
-	display.controll.SetShiftRegister()
+	display.control.shift_register[4] = tones_data
+	display.control.SetShiftRegister()
 	time.sleep(2)
-	display.controll.shift_register[4:] = "0000"
-	display.controll.SetShiftRegister()
+	display.control.shift_register[4:] = "0000"
+	display.control.SetShiftRegister()
 
 def restart():
 	display.led(True)
