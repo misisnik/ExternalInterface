@@ -6,8 +6,7 @@ display controll
 .. autofunction:: lib
 
 """
-from mcp2210.commands import ChipSettings, SPISettings, USBSettings
-from mcp2210.device import MCP2210, CommandException
+from mcp2210 import MCP2210
 import numbers
 import time
 ############################################

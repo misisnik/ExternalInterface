@@ -221,7 +221,7 @@ class GUI(object):
 			get text size
 		"""
 		font = ImageFont.truetype('fonts/{0}'.format(system_fonts[font]), size)
-		return self.draw.multiline_textsize(str(text), font)
+		return self.draw.textsize(str(text), font)
 
 	def getTextSize(self, text, size, font = 'Arial'):
 		"""
