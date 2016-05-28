@@ -145,11 +145,8 @@ class Snake(object):
                 self.move()
             elif (self.direction == 'right' and dr != 'left') or (self.direction == 'up' and dr!= 'down') or (self.direction == 'left' and dr != 'right') or (self.direction == 'down' and dr != 'up'):
                 self.direction = dr
-start_time = time.time()
 
 display = Display()
-
-print("--- %s seconds ---" % (time.time() - start_time))
 def game():
     for i in range(11):
         display.rectangleLoader('Snake loader', fill = i*10)

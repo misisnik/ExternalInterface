@@ -145,10 +145,8 @@ class Control(object):
 		"""
 		# Set DC low for command, high for data.
 		if self.last_display_dc != True:
-			start_time = time.time()
 			self._gpio[2] = True
 			self.last_display_dc = True
-			print("aaaaa--- %s seconds ---" % (time.time() - start_time))
 		# Convert scalar argument to list so either can be passed as parameter.
 		if isinstance(data, numbers.Number):
 			data = [data & 0xFF]

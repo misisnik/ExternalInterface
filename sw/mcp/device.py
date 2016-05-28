@@ -1,6 +1,6 @@
 
 import hid
-from mcp2210 import commands
+from mcp import commands
 import time
 import sys
 import os
@@ -142,6 +142,8 @@ class MCP2210(object):
           pid: Product ID
         """
         self.spi_tx = 0
+        self.vid = vid
+        self.pid = pid
         self.hid = hid.device()
         self.hid.open(vid, pid)
         self.gpio_direction = GPIOSettings(self, commands.GetGPIODirectionCommand, commands.SetGPIODirectionCommand)
@@ -163,6 +165,7 @@ class MCP2210(object):
         if lastone and lastone == "Small":
             
             self.hid.write(command_data[0:8])
+            self.hid.read(0)
             return None
         self.hid.write(command_data)
         if retry:
