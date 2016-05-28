@@ -1,1 +1,1 @@
-from sw.run import Display
+from .view import Display

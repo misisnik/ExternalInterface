@@ -45,6 +45,7 @@ class GPIOSettings(object):
 
     @property
     def raw(self):
+
         if self._value is None:
             self._value = self._device.sendCommand(self._get_command()).gpio
         # self._value = self._device.sendCommand(self._get_command()).gpio
@@ -148,7 +149,7 @@ class MCP2210(object):
         self.eeprom = EEPROMData(self)
         self.cancel_transfer()
 
-    def sendCommand(self, command, lastone = None):
+    def sendCommand(self, command, lastone = None, retry = False):
         """Sends a Command object to the MCP2210 and returns its response.
 
         Arguments:
@@ -157,23 +158,23 @@ class MCP2210(object):
         Returns:
             A commands.Response instance, or raises a CommandException on error.
         """
-        command_data = commandbuffer(command)
 
-        
+        command_data = commandbuffer(command)
         if lastone and lastone == "Small":
+            
             self.hid.write(command_data[0:8])
-            self.hid.read(0)
-            #self.cancel_transfer()
-            #self.hid.read(0)
-            return
+            return None
         self.hid.write(command_data)
+        if retry:
+            self.hid.read(0)
+            return None
         dat = self.hid.read(64)
         response_data = bytearray(x for x in dat)
         response = command.RESPONSE.from_buffer_copy(response_data)
 
         if response.status != 0:
             if response.status == 0xf8:
-                return self.sendCommand(command, None)
+                return self.sendCommand(command, None, True)
             else:
                 raise CommandException(response.status)
 
@@ -253,7 +254,10 @@ class MCP2210(object):
 
         response = ''
         for i in range(0, len(data), 60):
-            response += self.sendCommand(commands.SPITransferCommand(data[i:i + 60])).data
+            try:
+                response += self.sendCommand(commands.SPITransferCommand(data[i:i + 60])).data
+            except:
+                pass
 
         if len(response) < len(data):
             self.sendCommand(commands.SPITransferCommand(''), 'Small')
