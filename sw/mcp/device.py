@@ -177,7 +177,10 @@ class MCP2210(object):
 
         if response.status != 0:
             if response.status == 0xf8:
-                return self.sendCommand(command, None, True)
+                if sys.platform.startswith('win') or sys.platform.startswith('win32'):
+                    return self.sendCommand(command, None, True)
+                else:
+                    return self.sendCommand(command, None)
             else:
                 raise CommandException(response.status)
 
