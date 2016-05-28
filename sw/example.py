@@ -3,7 +3,7 @@ import time
 import sys
 import random
 
-from sw import Display
+from display import Display
 
 import random
 
@@ -227,7 +227,7 @@ def logo():
     display.readyButtons('BOTH')
     display.resetBuffer()
     ph = os.path.dirname(os.path.realpath(__file__))
-    display.image("{0}/sw/img/vut_logo.bmp".format(ph))
+    display.image("{0}/display/img/vut_logo.bmp".format(ph))
     display.rewrite()
     while 1:
         #to menu
