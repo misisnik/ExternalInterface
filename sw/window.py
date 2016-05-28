@@ -220,7 +220,7 @@ class GUI(object):
 		self.draw.rectangle([first[0], first[1], second[0], second[1]], fill = fill, outline = not fill)
 
 	#finally get some information
-	def getMultilineTextSize(self, text, size, font = 'Arial'):
+	def getMultilineTextSize(self, text, size, f = 'Arial'):
 		"""
 			get text size
 		"""
@@ -228,7 +228,7 @@ class GUI(object):
 		font = ImageFont.truetype('{0}/fonts/{1}'.format(ph, system_fonts[f]), size)
 		return self.draw.multiline_textsize(str(text), font)
 
-	def getTextSize(self, text, size, font = 'Arial'):
+	def getTextSize(self, text, size, f = 'Arial'):
 		"""
 			get text size
 		"""
