@@ -265,18 +265,32 @@ class Control(object):
 			if gpio_bin == "101":
 				#central button
 				return 'center'
-			if gpio_bin == "001":
-				#right
-				return 'right'
-			if gpio_bin == "010":
-				#left
-				return 'left'
-			if gpio_bin == "011":
-				#up
-				return 'up'
-			if gpio_bin == "100":
-				#down
-				return 'down'
+			if self.gui.rotation == 180:
+				if gpio_bin == "001":
+					#right
+					return 'right'
+				if gpio_bin == "010":
+					#left
+					return 'left'
+				if gpio_bin == "011":
+					#up
+					return 'up'
+				if gpio_bin == "100":
+					#down
+					return 'down'
+			else:
+				if gpio_bin == "001":
+					#left
+					return 'left'
+				if gpio_bin == "010":
+					#right
+					return 'right'
+				if gpio_bin == "011":
+					#down
+					return 'down'
+				if gpio_bin == "100":
+					#up
+					return 'up'
 			return False
 		except ValueError as e:
 			#failed to open hid try to connect
@@ -296,12 +310,20 @@ class Control(object):
 			if gpio[0] == 1 and gpio[1] == 1:
 				#both
 				return 'BOTH'
-			if gpio[0] == 1:
-				#OK button
-				return 'OK'
-			if gpio[1] == 1:
-				#NG
-				return 'NG'
+			if self.gui.rotation == 180:
+				if gpio[1] == 1:
+					#OK button
+					return 'OK'
+				if gpio[0] == 1:
+					#NG
+					return 'NG'
+			else:
+				if gpio[1] == 1:
+					#NG button
+					return 'NG'
+				if gpio[0] == 1:
+					#OK
+					return 'OK'
 			return False
 
 		except ValueError as e:
@@ -319,7 +341,6 @@ class Control(object):
 		self.WriteByte([chr(data)], True)
 		#register latch
 		self._gpio[7] = False
-		time.sleep(0.1)
 		self._gpio[7] = True
 		self._gpio[2] = self.last_display_dc
 
