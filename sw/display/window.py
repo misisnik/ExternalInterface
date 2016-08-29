@@ -12,7 +12,7 @@ from PIL import ImageFont
 
 import os
 
-system_fonts = {'Arial' : 'arial.ttf', 'Big' : 'big.ttf', 'Tiny' : 'tiny.ttf'}
+system_fonts = {'Arial' : 'arial.ttf', 'Big' : 'big.ttf', 'Tiny' : 'tiny.ttf', 'jpn1': 'jpn/7pxkbus.TTF', 'jpn2': 'jpn/enksh__.ttf', 'jpn3': 'jpn/musekinin-katakana.TTF'}
 disp_width = 192
 disp_height = 64
 

@@ -1,0 +1,21 @@
+#! /bin/bash
+
+NAME=39by16_green_2layer_1_6mm_HASL_rozhrani_semestralka1_0_0B_5pcs
+SRC=output
+DIR=$SRC/$NAME
+
+rm -rf $DIR
+mkdir $DIR
+
+cp $SRC/rozhrani_semestralka-B_Cu.gbl      $DIR/${NAME}.gbl
+cp $SRC/rozhrani_semestralka-B_Mask.gbs    $DIR/${NAME}.gbs
+cp $SRC/rozhrani_semestralka-B_SilkS.gbo   $DIR/${NAME}.gbo
+cp $SRC/rozhrani_semestralka.drl           $DIR/${NAME}.drl
+cp $SRC/rozhrani_semestralka-Edge_Cuts.gm1 $DIR/${NAME}.gko
+cp $SRC/rozhrani_semestralka-F_Cu.gtl      $DIR/${NAME}.gtl
+cp $SRC/rozhrani_semestralka-F_Mask.gts    $DIR/${NAME}.gts
+cp $SRC/rozhrani_semestralka-F_SilkS.gto   $DIR/${NAME}.gto
+cp $SRC/rozhrani_semestralka-NPTH.drl      $DIR/${NAME}-NPTH.drl
+
+#zip -r ${DIR}.zip $DIR
+#rm -r $DIR

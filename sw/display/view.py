@@ -61,13 +61,13 @@ class Display(object):
 				'font':      ['Arial', 10],
 				'alignment': ('left', 'top')}),
 			(	'status',     {'rect':      ((0, 0),  (192, 19)),
-				'font':      ['Big', 12],
+				'font':      ['jpn3', 20],
 				'alignment': ('center', 'center')}),
 			(	'message',    {'rect':      ((0, 20), (192, 44)),
-				'font':      ['Arial', 10],
+				'font':      ['jpn2', 16],
 				'alignment': ('left', 'top')}),
 			('error_win',  {'rect':      ((0, 45), (192, 64)),
-			'font':      ['Tiny', 7],
+			'font':      ['jpn1', 7],
 			'alignment': ('left', 'top')})]:
 			setattr(Display, win, Win(self, win, opts))
 
@@ -213,13 +213,22 @@ class Display(object):
 				data - 'OK' for ok, 'NG' for NG and 'BOTH' for BOTH
 		"""
 		if not s: s = '0'
-		if data == 'OK':
-			self.control.shift_register[3] = s
-		elif data == 'NG':
-			self.control.shift_register[2] = s
-		elif data == 'BOTH':
-			self.control.shift_register[2] = s
-			self.control.shift_register[3] = s
+		if self.window.rotation == 180:
+			if data == 'OK':
+				self.control.shift_register[1] = s
+			elif data == 'NG':
+				self.control.shift_register[2] = s
+			elif data == 'BOTH':
+				self.control.shift_register[1] = s
+				self.control.shift_register[2] = s
+		else:
+			if data == 'OK':
+				self.control.shift_register[2] = s
+			elif data == 'NG':
+				self.control.shift_register[1] = s
+			elif data == 'BOTH':
+				self.control.shift_register[1] = s
+				self.control.shift_register[2] = s
 
 		self.control.SetShiftRegister()
 

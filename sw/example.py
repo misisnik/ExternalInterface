@@ -7,6 +7,10 @@ from display import Display
 
 import random
 
+# display.status= 'koniciva'
+# display.message = 'koniciva'
+# display.error_win = 'koniciva'
+
 class Snake(object):
     def __init__(self, display):
         self.display = display
@@ -146,7 +150,7 @@ class Snake(object):
             elif (self.direction == 'right' and dr != 'left') or (self.direction == 'up' and dr!= 'down') or (self.direction == 'left' and dr != 'right') or (self.direction == 'down' and dr != 'up'):
                 self.direction = dr
 
-display = Display()
+display = Display(orientation = 0)
 def game():
     for i in range(11):
         display.rectangleLoader('Snake loader', fill = i*10)

@@ -22,6 +22,22 @@ It contains:
 
 Installation
 ------------
+	-Ubuntu and python 2.7
+	---------------
+			$ apt-get update
+			$ apt-get install python-dev
+			$ apt-get install cython
+			$ apt-get install libusb-1.0.0 libusb-1.0.0-dev libudev-dev
+			$ pip install hidapi
+
+		install Pillow
+			$ apt-get install libjpeg-dev
+			$ pip3 install pillow
+
+		-- display LIB
+		git clone https://github.com/misisnik/ExternalInterface
+
+
 
 	-Raspbian Jesee
 	---------------
@@ -52,9 +68,6 @@ Installation
 		install Pillow
 			$ apt-get install libjpeg-dev
 			$ pip3 install pillow
-
-		install pyserial
-			$ pip3 install pyserial
 
 		-- display LIB
 		git clone https://github.com/misisnik/ExternalInterface

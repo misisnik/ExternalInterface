@@ -1428,27 +1428,15 @@ Wire Wire Line
 	7700 2450 7700 2650
 Connection ~ 7700 2550
 Wire Wire Line
-	3050 5750 3450 5750
-Wire Wire Line
-	3350 5850 3350 5750
-Connection ~ 3350 5750
-Wire Wire Line
-	3450 5450 3050 5450
-Connection ~ 3050 5450
-Wire Wire Line
-	3450 5450 3450 5650
-Wire Wire Line
 	3850 5150 3850 5200
 Wire Wire Line
 	4000 5150 4000 5200
 Connection ~ 3850 5150
-Connection ~ 3050 5150
 Wire Wire Line
 	4450 6050 4450 6150
 Connection ~ 3250 6900
 Connection ~ 3450 6900
 Connection ~ 3650 6900
-Connection ~ 3350 5850
 Connection ~ 4450 5750
 Wire Wire Line
 	4800 2650 4800 2700
@@ -1620,11 +1608,7 @@ Wire Notes Line
 	650  3450 5550 3450
 Wire Wire Line
 	3050 5850 3050 6900
-Wire Wire Line
-	3450 5850 3050 5850
 Connection ~ 3050 6900
-Wire Wire Line
-	3050 5150 4000 5150
 $Comp
 L NPIC6C596 U6
 U 1 1 570D70F7
@@ -1767,4 +1751,20 @@ Wire Notes Line
 	650  7650 650  3450
 Wire Notes Line
 	5550 3450 5550 7650
+Wire Wire Line
+	3350 5850 3350 5750
+Connection ~ 3350 5850
+Wire Wire Line
+	3450 5850 3050 5850
+Connection ~ 3350 5750
+Wire Wire Line
+	3050 5750 3450 5750
+Connection ~ 3050 5450
+Connection ~ 3050 5150
+Wire Wire Line
+	3050 5150 4000 5150
+Wire Wire Line
+	3450 5450 3450 5650
+Wire Wire Line
+	3450 5450 3050 5450
 $EndSCHEMATC

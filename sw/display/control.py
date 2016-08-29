@@ -341,6 +341,7 @@ class Control(object):
 		self.WriteByte([chr(data)], True)
 		#register latch
 		self._gpio[7] = False
+		time.sleep(0.1)
 		self._gpio[7] = True
 		self._gpio[2] = self.last_display_dc
 
