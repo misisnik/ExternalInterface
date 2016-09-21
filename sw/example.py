@@ -2,14 +2,8 @@ import os
 import time
 import sys
 import random
-
 from display import Display
-
-import random
-
-# display.status= 'koniciva'
-# display.message = 'koniciva'
-# display.error_win = 'koniciva'
+from tkinter import *
 
 class Snake(object):
     def __init__(self, display):
@@ -172,8 +166,8 @@ def game():
                     #game over
                     display.resetBuffer()
                     display.status = "GAME OVER"
-                    display.message = "Získaný počet bodů činí: {0}".format(snake.snakeLenght - 4)
-                    display.error_win = "Pro spuštění hry stiskněte horní tlačítko, pro hlavní menu spodní tlačítko"
+                    display.message = " Your score: {0}".format(snake.snakeLenght - 4)
+                    display.error_win = " For retry -press green button, for exit press read"
                     display.led(True)
                     display.sound('a')
                     display.sound(False)
@@ -200,7 +194,7 @@ def game():
                         break
 
         elif menu_choosed == 1:
-            text = "Had se ovládá natáčením joysticku do stran. Pokud joystick zamáčknete, had se bude posunovat rychleji. Po podržení rozsvícených tlačítek ukončíte hru, respektive i nápovědu."
+            text = "Snake is controlling via joystick. If joystick is pressed, snake is faster. To exit game and this help just press both of buttons."
             display.textArea(text)
             display.resetBuffer()
         elif menu_choosed == 2:
@@ -208,7 +202,7 @@ def game():
 
 def help():
     display.font = ['Arial', 10]
-    text = "Následující text informuje o funkčnosti zařízení. Celkové ovládání se provádí za pomocí Joysticku. Pokud je zapotřebí ovládat tlačítky, vždy pro tuto možnost budete informováni jejich rozsvícením. Například pro odchod z nápovědy stačí současně zmáčknout obě rozsvícená tlačítka."
+    text = "Menu is controlling via joystick and buttons. For leave this help pres both of buttons."
     display.textArea(text)
 
 from datetime import datetime
@@ -231,7 +225,7 @@ def logo():
     display.readyButtons('BOTH')
     display.resetBuffer()
     ph = os.path.dirname(os.path.realpath(__file__))
-    display.image("{0}/display/img/vut_logo.bmp".format(ph))
+    display.image("{0}/display/img/alps_logo.bmp".format(ph))
     display.rewrite()
     while 1:
         #to menu
@@ -241,7 +235,7 @@ def logo():
 
 def buzzer():
     #zapiskej
-    tones = display.checkbox('Zvolte tony',['Ton 1', 'Ton 2', 'Ton 3', 'Ton 4'])
+    tones = display.checkbox('Select tone',['Tone 1', 'Tone 2', 'Tone 3', 'Tone 4'])
 
     tones_data = ""
     for i in tones:
@@ -260,7 +254,7 @@ def restart():
     import os
     display.resetBuffer()
     display.fotn = ['Arial', 20]
-    display.lineText('Počítač se restartuje', align = 'center')
+    display.lineText('Coputer is restarting', align = 'center')
     display.rewrite()
     os.system("sudo reboot")
 
@@ -269,25 +263,82 @@ def off():
     import os
     display.resetBuffer()
     display.fotn = ['Arial', 20]
-    display.lineText('Počítač se vypíná', align = 'center')
+    display.lineText('Computer is going to off', align = 'center')
     display.rewrite()
     os.system("sudo poweroff")
 
-while 1:
-    menu_choosed = display.menu("Hlavní nabídka", ["Nápověda", "Hrát hru", "Zobrazit hodiny", "Zobrazit obrázek", "Zapískat", "Restartovat počítač", "Vypnout počítač"])
-    if menu_choosed == 0:
-        help()
-    elif menu_choosed == 1:
-        game()
-    elif menu_choosed == 2:
-        clock()
-    elif menu_choosed == 3:
-        logo()
-    elif menu_choosed == 4:
-        buzzer()
-    elif menu_choosed == 5:
-        restart()
-    elif menu_choosed == 6:
-        off()
+def demo():
+    while 1:
+        menu_choosed = display.menu("Main menu", ["Helo", "Play game", "Show time", "Show picture", "Beep", "Stop demo"])
+        if menu_choosed == 0:
+            help()
+        elif menu_choosed == 1:
+            game()
+        elif menu_choosed == 2:
+            clock()
+        elif menu_choosed == 3:
+            logo()
+        elif menu_choosed == 4:
+            buzzer()
+        elif menu_choosed == 5:
+            display.reset()
+            return
 
+        display.resetBuffer()
+
+
+
+
+def show_text(text, text_style, text_size):
+    text = text.get("1.0",END)
+    font = text_style.get()
+    size = text_size.get()
+
+    display.font = [font, int(size)]
     display.resetBuffer()
+    display.text(str(text))
+    display.rewrite()
+
+master = Tk()
+master.title('Aladin introduction software')
+stitek=Label(master, text=u"Alladin test programme", font="Arial 10")
+stitek.pack(padx=20, pady=10)
+
+
+
+
+b = Button(master, text="Start introduction demo", command=demo)
+b.pack()
+
+
+
+f=Frame(master,height=1,width=300,bg="black")
+f.pack(padx=20, pady=20)
+
+stitek=Label(master, text=u"Send text into display", font="Arial 10")
+stitek.pack()
+
+text=Text(height=1, width=30)
+text.pack(padx=20, pady=20)
+
+#familly
+text_style = StringVar(master)
+text_style.set(u"Please choose font") # standardní hodnota
+
+family = OptionMenu(master, text_style, "Arial", "Big", "Tiny", "Japan1", "Japan2", "Japan3")
+family.pack()
+
+#size
+text_size = StringVar(master)
+text_size.set(u"Please select font size") # standardní hodnota
+
+size = OptionMenu(master, text_size, "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22")
+size.pack()
+b = Button(master, text="Show on Aladin display", command= lambda: show_text(text, text_style, text_size))
+b.pack()
+
+f=Frame(master,height=1,width=300,bg="black")
+f.pack(padx=20, pady=20)
+
+
+mainloop()
