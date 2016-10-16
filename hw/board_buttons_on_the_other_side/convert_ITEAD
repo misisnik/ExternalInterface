@@ -1,0 +1,21 @@
+#! /bin/bash
+
+NAME=4by15_green_2layer_1_6mm_HASL_aladin1_1_1_5pcs
+SRC=outputs
+DIR=$SRC/$NAME
+
+rm -rf $DIR
+mkdir $DIR
+
+cp $SRC/rozhrani_semestralka-B.Cu.gbl      $DIR/${NAME}.gbl
+cp $SRC/rozhrani_semestralka-B.Mask.gbs    $DIR/${NAME}.gbs
+cp $SRC/rozhrani_semestralka-B.SilkS.gbo   $DIR/${NAME}.gbo
+cp $SRC/rozhrani_semestralka.drl           $DIR/${NAME}.drl
+cp $SRC/rozhrani_semestralka-Edge.Cuts.gm1 $DIR/${NAME}.gko
+cp $SRC/rozhrani_semestralka-F.Cu.gtl      $DIR/${NAME}.gtl
+cp $SRC/rozhrani_semestralka-F.Mask.gts    $DIR/${NAME}.gts
+cp $SRC/rozhrani_semestralka-F.SilkS.gto   $DIR/${NAME}.gto
+cp $SRC/rozhrani_semestralka-NPTH.drl      $DIR/${NAME}-NPTH.drl
+
+#zip -r ${DIR}.zip $DIR
+#rm -r $DIR
